@@ -8,6 +8,7 @@
         public string LastName { get; private set; }
         public string MiddleName { get; private set; }
         public DateOnly BirthDay { get; private set; }
+        public bool IsLinkedToAccount { get; private set; }
         private HumanInfo() { }
         public HumanInfo(Picture photo, string email, string firstName, string lastName, string middleName, DateOnly birthDay)
         {
@@ -17,6 +18,7 @@
             LastName = lastName;
             MiddleName = middleName;
             BirthDay = birthDay;
+            IsLinkedToAccount = false;
         }
     }
 }

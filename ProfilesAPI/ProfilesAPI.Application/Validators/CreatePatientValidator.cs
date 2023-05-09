@@ -8,7 +8,7 @@ namespace ProfilesAPI.Application.Validators
         private const string _phoneRegex = "^(\\+)?((\\d{2,3}) ?\\d|\\d)(([ -]?\\d)|( ?(\\d{2,3}) ?)){5,12}\\d$";
         public CreatePatientValidator()
         {
-            RuleFor(x => x.HumanInfo).SetValidator(new HumanInfoValidator());
+            RuleFor(x => x.Info).SetValidator(new HumanInfoValidator());
             RuleFor(x => x.phoneNumber).NotEmpty().NotNull().Matches(_phoneRegex);
         }
     }
