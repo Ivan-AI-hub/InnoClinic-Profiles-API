@@ -1,4 +1,4 @@
-﻿namespace ProfilesAPI.Services.Models
+﻿namespace ProfilesAPI.Services.Abstraction.AggregatesModels.PatientAggregate
 {
     public class PatientDTO
     {

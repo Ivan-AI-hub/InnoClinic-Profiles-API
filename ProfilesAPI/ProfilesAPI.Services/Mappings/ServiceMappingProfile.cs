@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using ProfilesAPI.Application.Commands.Patients.Create;
 using ProfilesAPI.Domain;
-using ProfilesAPI.Services.Models;
+using ProfilesAPI.Services.Abstraction.AggregatesModels;
+using ProfilesAPI.Services.Abstraction.AggregatesModels.PatientAggregate;
 
 namespace ProfilesAPI.Services.Mappings
 {
@@ -9,9 +9,9 @@ namespace ProfilesAPI.Services.Mappings
     {
         public ServiceMappingProfile()
         {
-            CreateMap<CreatePatientModel, CreatePatient>()
+            CreateMap<CreatePatientModel, Patient>()
                  .ForMember(s => s.Info.Photo.Name, r => r.MapFrom(d => d.Photo.Name));
-            
+
             CreateMap<Patient, PatientDTO>().ReverseMap();
 
             CreateMap<HumanInfo, HumanInfoDTO>()

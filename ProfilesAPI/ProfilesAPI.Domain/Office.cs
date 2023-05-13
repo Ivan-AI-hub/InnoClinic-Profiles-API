@@ -2,7 +2,7 @@
 {
     public class Office
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
         private Office() { }
         public Office(Guid id)
         {

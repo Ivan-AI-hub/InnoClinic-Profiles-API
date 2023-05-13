@@ -1,44 +1,50 @@
 ﻿using AutoMapper;
-using MediatR;
-using ProfilesAPI.Application.Commands.Patients.Create;
+using FluentValidation;
 using ProfilesAPI.Domain;
-using ProfilesAPI.Services.Models;
-using ProfilesAPI.Services.Results;
+using ProfilesAPI.Domain.Exceptions;
+using ProfilesAPI.Domain.Interfaces;
+using ProfilesAPI.Services.Abstraction;
+using ProfilesAPI.Services.Abstraction.AggregatesModels.PatientAggregate;
 
 namespace ProfilesAPI.Services
 {
-    public class PatientService
+    public class PatientService : BaseService, IPatientService
     {
-        private IMediator _mediator;
         private IMapper _mapper;
-        private BlobService _blobService;
-        public PatientService(IMediator mediator, IMapper mapper, BlobService blobService) 
+        private IValidator<CreatePatientModel> _createPatientValidator;
+
+        public PatientService(IRepositoryManager repositoryManager, IBlobService blobService, IMapper mapper,
+            IValidator<CreatePatientModel> createPatientValidator) : base(blobService, repositoryManager)
         {
-            _mediator = mediator;
             _mapper = mapper;
+            _createPatientValidator = createPatientValidator;
             _blobService = blobService;
         }
 
-        public async Task<ServiceValueResult<PatientDTO>> CreatePatientAsync(CreatePatientModel model, CancellationToken cancellationToken = default)
+        public async Task<PatientDTO> CreatePatientAsync(CreatePatientModel model, CancellationToken cancellationToken = default)
         {
-            if (model.Photo != null)
-            {
-                var blobFileResult = await IsBlobFileNameValid(model.Photo.FileName);
-                if (!blobFileResult.IsComplite)
-                    return new ServiceValueResult<PatientDTO>(blobFileResult);
-            }
+            await ValidateBlobFileName(model.Photo, cancellationToken);
+            await ValidateModel(model, _createPatientValidator, cancellationToken);
+            await ValidateEmail(model.Email);
 
-            var request = _mapper.Map<CreatePatient>(model);
-            var applicationResult = await _mediator.Send(request, cancellationToken);
+            var patient = _mapper.Map<Patient>(model);
 
-            if (!applicationResult.IsComplite)
-                return new ServiceValueResult<PatientDTO>(applicationResult);
+            await _repositoryManager.PatientRepository.CreateAsync(patient);
+            await _repositoryManager.SaveChangesAsync(cancellationToken);
 
             if (model.Photo != null)
                 await _blobService.UploadAsync(model.Photo);
 
-            var patient = await GetPatientDTOWithPhotoAsync(applicationResult.Value);
-            return new ServiceValueResult<PatientDTO>(patient);
+            return await GetPatientDTOWithPhotoAsync(patient, cancellationToken);
+        }
+
+        public async Task<PatientDTO> GetPatientAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var patient = await _repositoryManager.PatientRepository.GetItemAsync(id, cancellationToken);
+            if (patient == null)
+                throw new PatientNotFoundException(id);
+
+            return await GetPatientDTOWithPhotoAsync(patient, cancellationToken);
         }
 
         private async Task<PatientDTO> GetPatientDTOWithPhotoAsync(Patient patientData, CancellationToken cancellationToken = default)
@@ -51,15 +57,6 @@ namespace ProfilesAPI.Services
             }
 
             return patient;
-        }
-
-        private async Task<IServiceResult> IsBlobFileNameValid(string blobFileName)
-        {
-            if (await _blobService.IsBlobExist(blobFileName))
-            {
-                return new ServiceVoidResult(errors: "File with the same name already exist in database");
-            }
-            return new ServiceVoidResult();
         }
     }
 }

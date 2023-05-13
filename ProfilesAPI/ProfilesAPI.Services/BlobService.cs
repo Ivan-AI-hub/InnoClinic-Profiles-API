@@ -1,12 +1,13 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using ProfilesAPI.Services.Models;
+using ProfilesAPI.Services.Abstraction;
+using ProfilesAPI.Services.Abstraction.AggregatesModels;
 using ProfilesAPI.Services.Settings;
 
 namespace ProfilesAPI.Services
 {
-    public class BlobService
+    public class BlobService : IBlobService
     {
         private BlobStorageSettings _blobStorageSettings;
         public BlobService(IOptions<BlobStorageSettings> blobStorageSettings)
