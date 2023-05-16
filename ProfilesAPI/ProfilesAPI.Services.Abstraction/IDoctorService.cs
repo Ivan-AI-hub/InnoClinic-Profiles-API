@@ -8,7 +8,8 @@ namespace ProfilesAPI.Services.Abstraction
     {
         Task<DoctorDTO> CreateDoctorAsync(CreateDoctorModel model, CancellationToken cancellationToken = default);
         Task<DoctorDTO> EditDoctorAsync(Guid id, EditDoctorModel model, CancellationToken cancellationToken = default);
+        Task EditDoctorStatusAsync(Guid id, WorkStatusDTO workStatus, CancellationToken cancellationToken = default);
         Task<DoctorDTO> GetDoctorAsync(Guid id, CancellationToken cancellationToken = default);
-        IEnumerable<DoctorDTO> GetDoctorsPage(Page page, IFiltrator<T> filtrator);
+        IEnumerable<DoctorDTO> GetDoctors(Page page, IFiltrator<T> filtrator);
     }
 }

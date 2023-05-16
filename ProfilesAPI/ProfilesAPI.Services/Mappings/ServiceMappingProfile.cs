@@ -9,13 +9,17 @@ namespace ProfilesAPI.Services.Mappings
     {
         public ServiceMappingProfile()
         {
-            CreateMap<CreatePatientModel, Patient>()
-                 .ForMember(s => s.Info.Photo.Name, r => r.MapFrom(d => d.Photo.Name));
+            CreateMap<CreatePatientModel, Patient>();
+            CreateMap<EditPatientModel, CreatePatientModel>();
 
             CreateMap<Patient, PatientDTO>().ReverseMap();
 
             CreateMap<HumanInfo, HumanInfoDTO>()
                 .ForMember(s => s.Photo, r => r.Ignore())
+                .ReverseMap();
+
+            CreateMap<CreateHumanInfo, HumanInfo>()
+                .ForMember(s => s.Photo, r => r.MapFrom(t => new Picture(t.Photo.FileName)))
                 .ReverseMap();
         }
     }

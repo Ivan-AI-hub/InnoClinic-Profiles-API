@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace ProfilesAPI.Services.Abstraction.AggregatesModels.PatientAggregate
+﻿namespace ProfilesAPI.Services.Abstraction.AggregatesModels.PatientAggregate
 {
-    public record CreatePatientModel(IFormFile? Photo,
-                                     string Email,
-                                     string FirstName,
-                                     string LastName,
-                                     string MiddleName,
-                                     DateOnly BirthDay,
-                                     string PhoneNumber);
+    public record CreatePatientModel
+    {
+        public CreateHumanInfo Info { get; private set; }
+        public string PhoneNumber { get; set; }
+
+        public CreatePatientModel(CreateHumanInfo info, string phoneNumber)
+        {
+            Info = info;
+            PhoneNumber = phoneNumber;
+        }
+    }
 }
