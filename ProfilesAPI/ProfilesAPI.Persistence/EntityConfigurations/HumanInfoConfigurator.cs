@@ -9,6 +9,7 @@ namespace ProfilesAPI.Persistence.EntityConfigurations
         public void Configure(EntityTypeBuilder<HumanInfo> builder)
         {
             builder.HasIndex(x => x.Email).IsUnique();
+            builder.OwnsOne(x => x.Photo);
         }
     }
 }

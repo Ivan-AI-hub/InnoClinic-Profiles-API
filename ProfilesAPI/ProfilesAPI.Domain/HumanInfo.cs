@@ -8,9 +8,9 @@
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
-        public DateOnly BirthDay { get; set; }
+        public DateTime BirthDay { get; set; }
         private HumanInfo() { }
-        public HumanInfo(Picture photo, string email, string firstName, string lastName, string middleName, DateOnly birthDay)
+        public HumanInfo(Picture photo, string email, string firstName, string lastName, string middleName, DateTime birthDay)
         {
             Photo = photo;
             Email = email;

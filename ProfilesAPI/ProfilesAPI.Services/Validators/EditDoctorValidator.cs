@@ -3,7 +3,7 @@ using ProfilesAPI.Services.Abstraction.AggregatesModels.DoctorAggregate;
 
 namespace ProfilesAPI.Services.Validators
 {
-    internal class EditDoctorValidator : AbstractValidator<EditDoctorModel>
+    public class EditDoctorValidator : AbstractValidator<EditDoctorModel>
     {
         public EditDoctorValidator()
         {

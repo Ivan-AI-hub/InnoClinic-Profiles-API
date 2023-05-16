@@ -8,7 +8,7 @@
         public Office Office { get; private set; }
         public int CareerStartYear { get; set; }
         public WorkStatus Status { get; set; }
-
+        private Doctor() { }
         public Doctor(HumanInfo info, string specialization,
             Office office, int careerStartYear, WorkStatus status)
         {

@@ -11,7 +11,7 @@ using ProfilesAPI.Services.Filtrators;
 
 namespace ProfilesAPI.Services
 {
-    internal class DoctorService : BaseService, IDoctorService
+    public class DoctorService : BaseService, IDoctorService
     {
         private IMapper _mapper;
         private IValidator<CreateDoctorModel> _createDoctorValidator;
