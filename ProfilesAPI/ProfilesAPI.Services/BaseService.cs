@@ -24,9 +24,9 @@ namespace ProfilesAPI.Services
                 throw new BlobNameIsNotValidException(file.FileName);
         }
 
-        protected async Task ValidateEmail(string email)
+        protected async Task ValidateEmailAsync(string email, CancellationToken cancellationToken = default)
         {
-            var isEmailInvalid = await _repositoryManager.HumanInfoRepository.IsItemExistAsync(x => x.Email == email);
+            var isEmailInvalid = await _repositoryManager.HumanInfoRepository.IsExistAsync(x => x.Email == email, cancellationToken);
             if (isEmailInvalid)
                 throw new ProfileWithSameEmailExistException(email);
         }

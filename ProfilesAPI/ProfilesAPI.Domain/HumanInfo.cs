@@ -3,7 +3,7 @@
     public class HumanInfo
     {
         public Guid Id { get; private set; }
-        public Picture? Photo { get; private set; }
+        public Picture? Photo { get; set; }
         public string Email { get; private set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

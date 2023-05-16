@@ -29,7 +29,7 @@ namespace ProfilesAPI.Services
         {
             await ValidateBlobFileName(model.Info.Photo, cancellationToken);
             await ValidateModel(model, _createPatientValidator, cancellationToken);
-            await ValidateEmail(model.Info.Email);
+            await ValidateEmailAsync(model.Info.Email, cancellationToken);
 
             var patient = _mapper.Map<Patient>(model);
 
@@ -67,7 +67,7 @@ namespace ProfilesAPI.Services
             createModel.Info.Email = oldPatient.Info.Email;
 
             var patient = _mapper.Map<Patient>(createModel);
-            await _repositoryManager.PatientRepository.CreateAsync(patient);
+            await _repositoryManager.PatientRepository.UpdateAsync(id, patient);
             await _repositoryManager.SaveChangesAsync(cancellationToken);
 
             if (oldPatient.Info.Photo != null)

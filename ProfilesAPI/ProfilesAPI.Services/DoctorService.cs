@@ -28,7 +28,7 @@ namespace ProfilesAPI.Services
         {
             await ValidateBlobFileName(model.Info.Photo, cancellationToken);
             await ValidateModel(model, _createDoctorValidator, cancellationToken);
-            await ValidateEmail(model.Info.Email);
+            await ValidateEmailAsync(model.Info.Email, cancellationToken);
 
             var doctor = _mapper.Map<Doctor>(model);
 
@@ -50,10 +50,7 @@ namespace ProfilesAPI.Services
             if (oldDoctor == null)
                 throw new DoctorNotFoundException(id);
 
-            var createModel = _mapper.Map<CreateDoctorModel>(model);
-            createModel.Info.Email = oldDoctor.Info.Email;
-
-            var doctor = _mapper.Map<Doctor>(createModel);
+            var doctor = _mapper.Map<Doctor>(model);
 
             await _repositoryManager.DoctorRepository.UpdateAsync(id, doctor);
             await _repositoryManager.SaveChangesAsync(cancellationToken);
