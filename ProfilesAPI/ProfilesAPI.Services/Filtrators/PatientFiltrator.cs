@@ -1,5 +1,4 @@
 ﻿using ProfilesAPI.Domain;
-using ProfilesAPI.Services.Abstraction.QueryableManipulation;
 
 namespace ProfilesAPI.Services.Filtrators
 {

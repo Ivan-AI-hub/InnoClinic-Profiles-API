@@ -1,4 +1,4 @@
-﻿namespace ProfilesAPI.Services.Abstraction.QueryableManipulation
+﻿namespace ProfilesAPI.Services.Filtrators
 {
     public interface IFiltrator<T>
     {

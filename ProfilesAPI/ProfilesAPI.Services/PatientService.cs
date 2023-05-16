@@ -7,10 +7,11 @@ using ProfilesAPI.Services.Abstraction;
 using ProfilesAPI.Services.Abstraction.AggregatesModels;
 using ProfilesAPI.Services.Abstraction.AggregatesModels.PatientAggregate;
 using ProfilesAPI.Services.Abstraction.QueryableManipulation;
+using ProfilesAPI.Services.Filtrators;
 
 namespace ProfilesAPI.Services
 {
-    public class PatientService : BaseService, IPatientService<Patient>
+    public class PatientService : BaseService, IPatientService
     {
         private IMapper _mapper;
         private IValidator<CreatePatientModel> _createPatientValidator;
@@ -88,20 +89,14 @@ namespace ProfilesAPI.Services
             return await GetPatientDTOWithPhotoAsync(patient, cancellationToken);
         }
 
-        public IEnumerable<PatientDTO> GetPatients(Page page, IFiltrator<Patient> filtrator)
+        public IEnumerable<PatientDTO> GetPatients(Page page, PatientFiltrationModel filtrationModel)
         {
-            var patients = _repositoryManager.PatientRepository.GetItems(false);
-            patients = filtrator.Filtrate(patients);
-            patients = PageSeparator.GetPage(patients, page);
-
-            return patients.ToList().Select(x => GetPatientDTOWithPhotoAsync(x).Result);
+            return GetFiltratedPatients(page, filtrationModel).ToList().Select(x => GetPatientDTOWithPhotoAsync(x).Result);
         }
 
-        public IEnumerable<PatientDTO> GetPatientsInfo(Page page, IFiltrator<Patient> filtrator)
+        public IEnumerable<PatientDTO> GetPatientsInfo(Page page, PatientFiltrationModel filtrationModel)
         {
-            var patients = _repositoryManager.PatientRepository.GetItems(false);
-            patients = filtrator.Filtrate(patients);
-            patients = PageSeparator.GetPage(patients, page);
+            var patients = GetFiltratedPatients(page, filtrationModel);
 
             return _mapper.Map<IEnumerable<PatientDTO>>(patients);
         }
@@ -116,6 +111,15 @@ namespace ProfilesAPI.Services
             }
 
             return patient;
+        }
+
+        private IQueryable<Patient> GetFiltratedPatients(Page page, PatientFiltrationModel filtrationModel)
+        {
+            var patients = _repositoryManager.PatientRepository.GetItems(false);
+            var filtrator = _mapper.Map<IFiltrator<Patient>>(filtrationModel);
+            patients = filtrator.Filtrate(patients);
+            patients = PageSeparator.GetPage(patients, page);
+            return patients;
         }
     }
 }

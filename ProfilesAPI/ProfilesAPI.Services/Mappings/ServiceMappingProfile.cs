@@ -2,6 +2,8 @@
 using ProfilesAPI.Domain;
 using ProfilesAPI.Services.Abstraction.AggregatesModels;
 using ProfilesAPI.Services.Abstraction.AggregatesModels.PatientAggregate;
+using ProfilesAPI.Services.Abstraction.QueryableManipulation;
+using ProfilesAPI.Services.Filtrators;
 
 namespace ProfilesAPI.Services.Mappings
 {
@@ -21,6 +23,9 @@ namespace ProfilesAPI.Services.Mappings
             CreateMap<CreateHumanInfo, HumanInfo>()
                 .ForMember(s => s.Photo, r => r.MapFrom(t => new Picture(t.Photo.FileName)))
                 .ReverseMap();
+
+            CreateMap<PatientFiltrationModel, PatientFiltrator>();
+            CreateMap<DoctorFiltrationModel, DoctorFiltrator>();
         }
     }
 }

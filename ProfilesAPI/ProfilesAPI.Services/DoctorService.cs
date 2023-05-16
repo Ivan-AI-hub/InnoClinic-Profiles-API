@@ -7,10 +7,11 @@ using ProfilesAPI.Services.Abstraction;
 using ProfilesAPI.Services.Abstraction.AggregatesModels;
 using ProfilesAPI.Services.Abstraction.AggregatesModels.DoctorAggregate;
 using ProfilesAPI.Services.Abstraction.QueryableManipulation;
+using ProfilesAPI.Services.Filtrators;
 
 namespace ProfilesAPI.Services
 {
-    internal class DoctorService : BaseService, IDoctorService<Doctor>
+    internal class DoctorService : BaseService, IDoctorService
     {
         private IMapper _mapper;
         private IValidator<CreateDoctorModel> _createDoctorValidator;
@@ -83,9 +84,10 @@ namespace ProfilesAPI.Services
             return await GetDoctorDTOWithPhotoAsync(doctor, cancellationToken);
         }
 
-        public IEnumerable<DoctorDTO> GetDoctors(Page page, IFiltrator<Doctor> filtrator)
+        public IEnumerable<DoctorDTO> GetDoctors(Page page, DoctorFiltrationModel filtrationModel)
         {
             var doctors = _repositoryManager.DoctorRepository.GetItems(false);
+            var filtrator = _mapper.Map<IFiltrator<Doctor>>(filtrationModel);
             doctors = filtrator.Filtrate(doctors);
             doctors = PageSeparator.GetPage(doctors, page);
 
