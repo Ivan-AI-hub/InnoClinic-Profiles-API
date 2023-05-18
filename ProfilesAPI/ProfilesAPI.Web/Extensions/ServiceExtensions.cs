@@ -26,6 +26,7 @@ namespace ProfilesAPI.Web.Extensions
         {
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IReceptionistService, ReceptionistService>();
             services.AddScoped<IBlobService, BlobService>();
         }
 

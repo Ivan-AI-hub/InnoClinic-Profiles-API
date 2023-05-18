@@ -5,6 +5,7 @@
         public IPatientRepository PatientRepository { get; }
         public IDoctorRepository DoctorRepository { get; }
         public IHumanInfoRepository HumanInfoRepository { get; }
+        public IReceptionistRepository ReceptionistRepository { get; }
         /// <summary>
         /// Saves all changes made in repositories.
         /// </summary>

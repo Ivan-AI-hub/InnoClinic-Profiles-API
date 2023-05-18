@@ -2,6 +2,7 @@
 using ProfilesAPI.Application.Abstraction.AggregatesModels;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate;
 using ProfilesAPI.Application.Abstraction.QueryableManipulation;
 using ProfilesAPI.Application.Filtrators;
 using ProfilesAPI.Domain;
@@ -21,7 +22,6 @@ namespace ProfilesAPI.Application.Mappings
                     { Photo = t.Photo != null ? new Picture(t.Photo.FileName) : null }));
 
             CreateMap<Doctor, DoctorDTO>();
-            CreateMap<Office, OfficeDTO>();
             CreateMap<DoctorFiltrationModel, IFiltrator<Doctor>>().As<DoctorFiltrator>();
             CreateMap<DoctorFiltrationModel, DoctorFiltrator>();
             CreateMap<CreateDoctorModel, Doctor>().ForMember(x => x.Office, r => r.MapFrom(t => new Office(t.OfficeId)));
@@ -30,6 +30,18 @@ namespace ProfilesAPI.Application.Mappings
                 s => s.MapFrom(t => new HumanInfo("", t.FirstName, t.LastName, t.MiddleName, t.BirthDay)
                 { Photo = t.Photo != null ? new Picture(t.Photo.FileName) : null }))
                 .ForMember(x => x.Office, s => s.MapFrom(t => new Office(t.OfficeId)));
+
+            CreateMap<Receptionist, ReceptionistDTO>();
+            CreateMap<ReceptionistFiltrationModel, IFiltrator<Receptionist>>().As<ReceptionistFiltrator>();
+            CreateMap<ReceptionistFiltrationModel, ReceptionistFiltrator>();
+            CreateMap<CreateReceptionistModel, Receptionist>();
+            CreateMap<EditReceptionistModel, Receptionist>()
+                .ForMember(x => x.Info,
+                s => s.MapFrom(t => new HumanInfo("", t.FirstName, t.LastName, t.MiddleName, t.BirthDay)
+                { Photo = t.Photo != null ? new Picture(t.Photo.FileName) : null }))
+                .ForMember(x => x.Office, s => s.MapFrom(t => new Office(t.OfficeId)));
+
+            CreateMap<Office, OfficeDTO>().ReverseMap();
 
             CreateMap<HumanInfo, HumanInfoDTO>().ForMember(s => s.Photo, r => r.Ignore());
             CreateMap<CreateHumanInfo, HumanInfo>()
