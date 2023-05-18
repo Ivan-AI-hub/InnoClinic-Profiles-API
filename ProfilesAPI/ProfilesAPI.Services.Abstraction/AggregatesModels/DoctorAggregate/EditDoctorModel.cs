@@ -6,7 +6,7 @@ namespace ProfilesAPI.Services.Abstraction.AggregatesModels.DoctorAggregate
                                      string FirstName,
                                      string LastName,
                                      string MiddleName,
-                                     DateOnly BirthDay,
+                                     DateTime BirthDay,
                                      string Specialization,
                                      Guid OfficeId,
                                      int CareerStartYear,

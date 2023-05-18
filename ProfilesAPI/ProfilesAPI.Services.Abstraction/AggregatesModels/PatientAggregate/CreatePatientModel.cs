@@ -1,14 +1,7 @@
 ﻿namespace ProfilesAPI.Services.Abstraction.AggregatesModels.PatientAggregate
 {
-    public record CreatePatientModel
+    public record CreatePatientModel(CreateHumanInfo Info)
     {
-        public CreateHumanInfo Info { get; private set; }
-        public string PhoneNumber { get; set; }
-
-        public CreatePatientModel(CreateHumanInfo info, string phoneNumber)
-        {
-            Info = info;
-            PhoneNumber = phoneNumber;
-        }
+        public string PhoneNumber { get; set; } = "";
     }
 }

@@ -21,6 +21,7 @@ namespace ProfilesAPI.Persistence.Repositories
                 throw new PatientNotFoundException(id);
             }
 
+            Context.HumansInfo.Remove(patient.Info);
             Context.Patients.Remove(patient);
         }
 

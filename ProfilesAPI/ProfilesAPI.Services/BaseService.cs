@@ -21,21 +21,27 @@ namespace ProfilesAPI.Services
         protected async Task ValidateBlobFileName(IFormFile? file, CancellationToken cancellationToken = default)
         {
             if (file != null && await _blobService.IsBlobExist(file.FileName, cancellationToken))
+            {
                 throw new BlobNameIsNotValidException(file.FileName);
+            }
         }
 
         protected async Task ValidateEmailAsync(string email, CancellationToken cancellationToken = default)
         {
             var isEmailInvalid = await _repositoryManager.HumanInfoRepository.IsExistAsync(x => x.Email == email, cancellationToken);
             if (isEmailInvalid)
+            {
                 throw new ProfileWithSameEmailExistException(email);
+            }
         }
 
         protected async Task ValidateModel<Tmodel>(Tmodel model, IValidator<Tmodel> validator, CancellationToken cancellationToken = default)
         {
             var validationResult = await validator.ValidateAsync(model, cancellationToken);
             if (!validationResult.IsValid)
+            {
                 throw new ValidationException(validationResult.Errors);
+            }
         }
     }
 }

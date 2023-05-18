@@ -37,19 +37,23 @@ namespace ProfilesAPI.Services
             await _repositoryManager.SaveChangesAsync(cancellationToken);
 
             if (model.Info.Photo != null)
+            {
                 await _blobService.UploadAsync(model.Info.Photo);
+            }
 
             return await GetDoctorDTOWithPhotoAsync(doctor, cancellationToken);
         }
 
-        public async Task<DoctorDTO> EditDoctorAsync(Guid id, EditDoctorModel model, CancellationToken cancellationToken = default)
+        public async Task EditDoctorAsync(Guid id, EditDoctorModel model, CancellationToken cancellationToken = default)
         {
             await ValidateBlobFileName(model.Photo, cancellationToken);
             await ValidateModel(model, _editDoctorModel, cancellationToken);
 
             var oldDoctor = await _repositoryManager.DoctorRepository.GetItemAsync(id, false, cancellationToken);
             if (oldDoctor == null)
+            {
                 throw new DoctorNotFoundException(id);
+            }
 
             var doctor = _mapper.Map<Doctor>(model);
 
@@ -57,19 +61,23 @@ namespace ProfilesAPI.Services
             await _repositoryManager.SaveChangesAsync(cancellationToken);
 
             if (oldDoctor.Info.Photo != null)
+            {
                 await _blobService.DeleteAsync(oldDoctor.Info.Photo.Name);
+            }
 
             if (model.Photo != null)
+            {
                 await _blobService.UploadAsync(model.Photo);
-
-            return await GetDoctorDTOWithPhotoAsync(doctor, cancellationToken);
+            }
         }
 
         public async Task EditDoctorStatusAsync(Guid id, WorkStatusDTO workStatus, CancellationToken cancellationToken = default)
         {
             var oldDoctor = await _repositoryManager.DoctorRepository.GetItemAsync(id, true, cancellationToken);
             if (oldDoctor == null)
+            {
                 throw new DoctorNotFoundException(id);
+            }
 
             oldDoctor.Status = _mapper.Map<WorkStatus>(workStatus);
             await _repositoryManager.SaveChangesAsync();
@@ -79,19 +87,23 @@ namespace ProfilesAPI.Services
         {
             var doctor = await _repositoryManager.DoctorRepository.GetItemAsync(id, false, cancellationToken);
             if (doctor == null)
+            {
                 throw new DoctorNotFoundException(id);
+            }
 
             return await GetDoctorDTOWithPhotoAsync(doctor, cancellationToken);
         }
 
         public IEnumerable<DoctorDTO> GetDoctors(Page page, DoctorFiltrationModel filtrationModel)
         {
-            var doctors = _repositoryManager.DoctorRepository.GetItems(false);
-            var filtrator = _mapper.Map<IFiltrator<Doctor>>(filtrationModel);
-            doctors = filtrator.Filtrate(doctors);
-            doctors = PageSeparator.GetPage(doctors, page);
+            return GetFiltratedDoctors(page, filtrationModel).ToList().Select(x => GetDoctorDTOWithPhotoAsync(x).Result);
+        }
 
-            return doctors.ToList().Select(x => GetDoctorDTOWithPhotoAsync(x).Result);
+        public IEnumerable<DoctorDTO> GetDoctorsInfo(Page page, DoctorFiltrationModel filtrationModel)
+        {
+            var doctors = GetFiltratedDoctors(page, filtrationModel);
+
+            return _mapper.Map<IEnumerable<DoctorDTO>>(doctors);
         }
 
         private async Task<DoctorDTO> GetDoctorDTOWithPhotoAsync(Doctor doctorData, CancellationToken cancellationToken = default)
@@ -104,6 +116,15 @@ namespace ProfilesAPI.Services
             }
 
             return doctor;
+        }
+
+        private IQueryable<Doctor> GetFiltratedDoctors(Page page, DoctorFiltrationModel filtrationModel)
+        {
+            var doctors = _repositoryManager.DoctorRepository.GetItems(false);
+            var filtrator = _mapper.Map<IFiltrator<Doctor>>(filtrationModel);
+            doctors = filtrator.Filtrate(doctors);
+            doctors = PageSeparator.GetPage(doctors, page);
+            return doctors;
         }
     }
 }

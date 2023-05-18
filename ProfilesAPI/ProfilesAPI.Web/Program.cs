@@ -1,6 +1,7 @@
 using FluentValidation;
 using ProfilesAPI.Presentation.Controllers;
 using ProfilesAPI.Services.Mappings;
+using ProfilesAPI.Services.Settings;
 using ProfilesAPI.Services.Validators;
 using ProfilesAPI.Web.Extensions;
 using ProfilesAPI.Web.Middlewares;
@@ -21,6 +22,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthorization();
 builder.Services.AddAutoMapper(typeof(ServiceMappingProfile));
 builder.Services.AddValidatorsFromAssemblyContaining<CreatePatientValidator>();
+
+
+builder.Services.Configure<BlobStorageSettings>(builder.Configuration.GetSection("BlobStorageConfig"));
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -28,6 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseHttpsRedirection();
 

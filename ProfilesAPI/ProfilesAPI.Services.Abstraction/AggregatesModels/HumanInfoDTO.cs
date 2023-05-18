@@ -9,9 +9,9 @@
         public string MiddleName { get; set; }
         public DateTime BirthDay { get; set; }
 
-        public HumanInfoDTO(Blob? photo, string email, string firstName, string lastName, string middleName, DateTime birthDay)
+        public HumanInfoDTO(string email, string firstName, string lastName, string middleName, DateTime birthDay)
         {
-            Photo = photo;
+            Photo = null;
             Email = email;
             FirstName = firstName;
             LastName = lastName;

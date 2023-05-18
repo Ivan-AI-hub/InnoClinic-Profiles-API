@@ -15,7 +15,9 @@ namespace ProfilesAPI.Services
             _blobStorageSettings = blobStorageSettings.Value;
             BlobContainerClient container = new BlobContainerClient(_blobStorageSettings.ConnectionString, _blobStorageSettings.ImagesContainerName);
             if (!container.Exists().Value)
+            {
                 container.CreateAsync();
+            }
         }
 
         /// <summary>

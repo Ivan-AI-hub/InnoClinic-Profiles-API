@@ -10,6 +10,7 @@ namespace ProfilesAPI.Services.Abstraction.AggregatesModels
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public DateTime BirthDay { get; set; }
+        public CreateHumanInfo() { }
         public CreateHumanInfo(IFormFile? photo, string email, string firstName, string lastName, string middleName, DateTime birthDay)
         {
             Photo = photo;

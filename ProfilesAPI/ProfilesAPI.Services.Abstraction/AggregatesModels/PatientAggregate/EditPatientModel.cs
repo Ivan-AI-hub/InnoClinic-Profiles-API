@@ -6,6 +6,6 @@ namespace ProfilesAPI.Services.Abstraction.AggregatesModels.PatientAggregate
                                      string FirstName,
                                      string LastName,
                                      string MiddleName,
-                                     DateOnly BirthDay,
+                                     DateTime BirthDay,
                                      string PhoneNumber);
 }
