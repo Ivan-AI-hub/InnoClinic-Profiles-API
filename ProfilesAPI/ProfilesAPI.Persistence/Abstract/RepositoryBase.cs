@@ -18,19 +18,20 @@ namespace ProfilesAPI.Persistence.Abstract
             return Context.Set<T>().AnyAsync(predicate, cancellationToken);
         }
 
-        public IQueryable<T> GetItemsByCondition(Expression<Func<T, bool>> predicate, bool trackChanges)
+        public IQueryable<T> GetItemsByCondition(Expression<Func<T, bool>> predicate)
         {
-            return GetItems(trackChanges).Where(predicate);
+            return GetItems().Where(predicate);
         }
 
         public async Task CreateAsync(T item)
         {
             await Context.Set<T>().AddAsync(item);
+            await Context.SaveChangesAsync();
         }
 
-        public abstract IQueryable<T> GetItems(bool trackChanges);
+        public abstract IQueryable<T> GetItems();
 
-        public abstract Task<T?> GetItemAsync(Guid id, bool trackChanges = true, CancellationToken cancellationToken = default);
+        public abstract Task<T?> GetItemAsync(Guid id, CancellationToken cancellationToken = default);
 
         public abstract Task UpdateAsync(Guid id, T updatedItem);
 

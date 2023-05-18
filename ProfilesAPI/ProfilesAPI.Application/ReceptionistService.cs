@@ -35,7 +35,6 @@ namespace ProfilesAPI.Application
             var receptionist = _mapper.Map<Receptionist>(model);
 
             await _repositoryManager.ReceptionistRepository.CreateAsync(receptionist);
-            await _repositoryManager.SaveChangesAsync(cancellationToken);
 
             if (model.Info.Photo != null)
             {
@@ -47,14 +46,13 @@ namespace ProfilesAPI.Application
 
         public async Task DeleteReceptionistAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var receptionist = await _repositoryManager.ReceptionistRepository.GetItemAsync(id, false, cancellationToken);
+            var receptionist = await _repositoryManager.ReceptionistRepository.GetItemAsync(id, cancellationToken);
             if (receptionist == null)
             {
                 throw new ReceptionistNotFoundException(id);
             }
 
             await _repositoryManager.ReceptionistRepository.DeleteAsync(id);
-            await _repositoryManager.SaveChangesAsync(cancellationToken);
             if (receptionist.Info.Photo != null)
             {
                 await _blobService.DeleteAsync(receptionist.Info.Photo.Name);
@@ -66,7 +64,7 @@ namespace ProfilesAPI.Application
             await ValidateBlobFileName(model.Photo, cancellationToken);
             await ValidateModel(model, _editReceptionistModel, cancellationToken);
 
-            var oldReceptionist = await _repositoryManager.ReceptionistRepository.GetItemAsync(id, false, cancellationToken);
+            var oldReceptionist = await _repositoryManager.ReceptionistRepository.GetItemAsync(id, cancellationToken);
             if (oldReceptionist == null)
             {
                 throw new ReceptionistNotFoundException(id);
@@ -75,7 +73,6 @@ namespace ProfilesAPI.Application
             var receptionist = _mapper.Map<Receptionist>(model);
 
             await _repositoryManager.ReceptionistRepository.UpdateAsync(id, receptionist);
-            await _repositoryManager.SaveChangesAsync(cancellationToken);
 
             if (oldReceptionist.Info.Photo != null)
             {
@@ -90,7 +87,7 @@ namespace ProfilesAPI.Application
 
         public async Task<ReceptionistDTO> GetReceptionistAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var receptionist = await _repositoryManager.ReceptionistRepository.GetItemAsync(id, false, cancellationToken);
+            var receptionist = await _repositoryManager.ReceptionistRepository.GetItemAsync(id, cancellationToken);
             if (receptionist == null)
             {
                 throw new ReceptionistNotFoundException(id);
@@ -125,7 +122,7 @@ namespace ProfilesAPI.Application
 
         private IQueryable<Receptionist> GetFiltratedReceptionists(Page page, ReceptionistFiltrationModel filtrationModel)
         {
-            var receptionists = _repositoryManager.ReceptionistRepository.GetItems(false);
+            var receptionists = _repositoryManager.ReceptionistRepository.GetItems();
             var filtrator = _mapper.Map<IFiltrator<Receptionist>>(filtrationModel);
             receptionists = filtrator.Filtrate(receptionists);
             receptionists = PageSeparator.GetPage(receptionists, page);

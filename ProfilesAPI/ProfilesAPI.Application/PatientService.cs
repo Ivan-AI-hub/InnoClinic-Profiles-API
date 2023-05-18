@@ -35,7 +35,6 @@ namespace ProfilesAPI.Application
             var patient = _mapper.Map<Patient>(model);
 
             await _repositoryManager.PatientRepository.CreateAsync(patient);
-            await _repositoryManager.SaveChangesAsync(cancellationToken);
 
             if (model.Info.Photo != null)
             {
@@ -47,14 +46,13 @@ namespace ProfilesAPI.Application
 
         public async Task DeletePatientAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var patient = await _repositoryManager.PatientRepository.GetItemAsync(id, false, cancellationToken);
+            var patient = await _repositoryManager.PatientRepository.GetItemAsync(id, cancellationToken);
             if (patient == null)
             {
                 throw new PatientNotFoundException(id);
             }
 
             await _repositoryManager.PatientRepository.DeleteAsync(id);
-            await _repositoryManager.SaveChangesAsync(cancellationToken);
             if (patient.Info.Photo != null)
             {
                 await _blobService.DeleteAsync(patient.Info.Photo.Name);
@@ -66,7 +64,7 @@ namespace ProfilesAPI.Application
             await ValidateBlobFileName(model.Photo, cancellationToken);
             await ValidateModel(model, _editPatientValidator, cancellationToken);
 
-            var oldPatient = await _repositoryManager.PatientRepository.GetItemAsync(id, false, cancellationToken);
+            var oldPatient = await _repositoryManager.PatientRepository.GetItemAsync(id, cancellationToken);
             if (oldPatient == null)
             {
                 throw new PatientNotFoundException(id);
@@ -74,7 +72,6 @@ namespace ProfilesAPI.Application
 
             var patient = _mapper.Map<Patient>(model);
             await _repositoryManager.PatientRepository.UpdateAsync(id, patient);
-            await _repositoryManager.SaveChangesAsync(cancellationToken);
 
             if (oldPatient.Info.Photo != null)
             {
@@ -89,7 +86,7 @@ namespace ProfilesAPI.Application
 
         public async Task<PatientDTO> GetPatientAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var patient = await _repositoryManager.PatientRepository.GetItemAsync(id, false, cancellationToken);
+            var patient = await _repositoryManager.PatientRepository.GetItemAsync(id, cancellationToken);
             if (patient == null)
             {
                 throw new PatientNotFoundException(id);
@@ -124,7 +121,7 @@ namespace ProfilesAPI.Application
 
         private IQueryable<Patient> GetFiltratedPatients(Page page, PatientFiltrationModel filtrationModel)
         {
-            var patients = _repositoryManager.PatientRepository.GetItems(false);
+            var patients = _repositoryManager.PatientRepository.GetItems();
             var filtrator = _mapper.Map<IFiltrator<Patient>>(filtrationModel);
             patients = filtrator.Filtrate(patients);
             patients = PageSeparator.GetPage(patients, page);

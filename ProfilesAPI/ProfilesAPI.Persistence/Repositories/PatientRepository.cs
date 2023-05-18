@@ -14,7 +14,7 @@ namespace ProfilesAPI.Persistence.Repositories
 
         public override async Task DeleteAsync(Guid id)
         {
-            var patient = await GetItemAsync(id, false);
+            var patient = await GetItemAsync(id);
 
             if (patient == null)
             {
@@ -23,23 +23,24 @@ namespace ProfilesAPI.Persistence.Repositories
 
             Context.HumansInfo.Remove(patient.Info);
             Context.Patients.Remove(patient);
+            await Context.SaveChangesAsync();
         }
 
-        public override Task<Patient?> GetItemAsync(Guid id, bool trackChanges = true, CancellationToken cancellationToken = default)
+        public override Task<Patient?> GetItemAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var patients = GetItems(trackChanges);
+            var patients = GetItems();
             return patients.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public override IQueryable<Patient> GetItems(bool trackChanges)
+        public override IQueryable<Patient> GetItems()
         {
             var patients = Context.Patients.Include(x => x.Info);
-            return trackChanges ? patients : patients.AsNoTracking();
+            return patients.AsNoTracking();
         }
 
         public override async Task UpdateAsync(Guid id, Patient updatedItem)
         {
-            var patient = await GetItemAsync(id, true);
+            var patient = await Context.Patients.FirstOrDefaultAsync(x => x.Id == id);
 
             if (patient == null)
             {
@@ -52,6 +53,8 @@ namespace ProfilesAPI.Persistence.Repositories
             patient.Info.BirthDay = updatedItem.Info.BirthDay;
             patient.Info.Photo = updatedItem.Info.Photo;
             patient.PhoneNumber = updatedItem.PhoneNumber;
+
+            await Context.SaveChangesAsync();
         }
     }
 }

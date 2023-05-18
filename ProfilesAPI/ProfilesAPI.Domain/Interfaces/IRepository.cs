@@ -7,14 +7,14 @@ namespace ProfilesAPI.Domain.Interfaces
 
         /// <param name="id">item's id</param>
         /// <returns>Item if it wes found or null if not</returns>
-        Task<T?> GetItemAsync(Guid id, bool trackChanges = true, CancellationToken cancellationToken = default);
+        Task<T?> GetItemAsync(Guid id, CancellationToken cancellationToken = default);
 
         /// <param name="predicate">Special predicate for element search</param>
         /// <returns>IQueryable collection</returns>
-        public IQueryable<T> GetItemsByCondition(Expression<Func<T, bool>> predicate, bool trackChanges = true);
+        public IQueryable<T> GetItemsByCondition(Expression<Func<T, bool>> predicate);
 
         /// <returns>queryable items from the database</returns>
-        public IQueryable<T> GetItems(bool trackChanges = true);
+        public IQueryable<T> GetItems();
 
         /// <summary>
         /// Create item in database

@@ -14,7 +14,7 @@ namespace ProfilesAPI.Persistence.Repositories
 
         public override async Task DeleteAsync(Guid id)
         {
-            var receptionist = await GetItemAsync(id, false);
+            var receptionist = await GetItemAsync(id);
 
             if (receptionist == null)
             {
@@ -23,23 +23,24 @@ namespace ProfilesAPI.Persistence.Repositories
 
             Context.HumansInfo.Remove(receptionist.Info);
             Context.Receptionists.Remove(receptionist);
+            await Context.SaveChangesAsync();
         }
 
-        public override Task<Receptionist?> GetItemAsync(Guid id, bool trackChanges = true, CancellationToken cancellationToken = default)
+        public override Task<Receptionist?> GetItemAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var receptionists = GetItems(trackChanges);
+            var receptionists = GetItems();
             return receptionists.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public override IQueryable<Receptionist> GetItems(bool trackChanges)
+        public override IQueryable<Receptionist> GetItems()
         {
             var receptionists = Context.Receptionists.Include(x => x.Info);
-            return trackChanges ? receptionists : receptionists.AsNoTracking();
+            return receptionists.AsNoTracking();
         }
 
         public override async Task UpdateAsync(Guid id, Receptionist updatedItem)
         {
-            var receptionist = await GetItemAsync(id, true);
+            var receptionist = await Context.Receptionists.FirstOrDefaultAsync(x => x.Id == id);
 
             if (receptionist == null)
             {
@@ -52,6 +53,8 @@ namespace ProfilesAPI.Persistence.Repositories
             receptionist.Info.BirthDay = updatedItem.Info.BirthDay;
             receptionist.Info.Photo = updatedItem.Info.Photo;
             receptionist.Office.Id = updatedItem.Office.Id;
+
+            await Context.SaveChangesAsync();
         }
     }
 }

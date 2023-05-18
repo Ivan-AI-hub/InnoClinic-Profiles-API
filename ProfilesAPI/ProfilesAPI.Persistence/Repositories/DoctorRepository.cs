@@ -14,7 +14,7 @@ namespace ProfilesAPI.Persistence.Repositories
 
         public override async Task DeleteAsync(Guid id)
         {
-            var doctor = await GetItemAsync(id, false);
+            var doctor = await GetItemAsync(id);
 
             if (doctor == null)
             {
@@ -23,23 +23,37 @@ namespace ProfilesAPI.Persistence.Repositories
 
             Context.HumansInfo.Remove(doctor.Info);
             Context.Doctors.Remove(doctor);
+            await Context.SaveChangesAsync();
         }
 
-        public override Task<Doctor?> GetItemAsync(Guid id, bool trackChanges = true, CancellationToken cancellationToken = default)
+        public async Task UpdateStatusAsync(Guid id, WorkStatus status, CancellationToken cancellationToken = default)
         {
-            var doctors = GetItems(trackChanges);
+            var doctor = await Context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (doctor == null)
+            {
+                throw new DoctorNotFoundException(id);
+            }
+
+            doctor.Status = status;
+            await Context.SaveChangesAsync();
+        }
+
+        public override Task<Doctor?> GetItemAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var doctors = GetItems();
             return doctors.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public override IQueryable<Doctor> GetItems(bool trackChanges)
+        public override IQueryable<Doctor> GetItems()
         {
             var doctors = Context.Doctors.Include(x => x.Info);
-            return trackChanges ? doctors : doctors.AsNoTracking();
+            return doctors.AsNoTracking();
         }
 
         public override async Task UpdateAsync(Guid id, Doctor updatedItem)
         {
-            var doctor = await GetItemAsync(id, true);
+            var doctor = Context.Doctors.FirstOrDefault(x => x.Id == id);
 
             if (doctor == null)
             {
@@ -56,6 +70,7 @@ namespace ProfilesAPI.Persistence.Repositories
             doctor.CareerStartYear = updatedItem.CareerStartYear;
             doctor.Status = updatedItem.Status;
 
+            await Context.SaveChangesAsync();
         }
     }
 }
