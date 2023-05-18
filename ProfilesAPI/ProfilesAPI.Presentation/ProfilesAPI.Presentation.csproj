@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProfilesAPI.Services.Abstraction\ProfilesAPI.Services.Abstraction.csproj" />
+    <ProjectReference Include="..\ProfilesAPI.Application.Abstraction\ProfilesAPI.Application.Abstraction.csproj" />
   </ItemGroup>
 
 </Project>

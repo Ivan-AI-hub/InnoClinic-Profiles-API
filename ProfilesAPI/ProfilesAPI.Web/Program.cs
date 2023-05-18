@@ -1,8 +1,8 @@
 using FluentValidation;
+using ProfilesAPI.Application.Mappings;
+using ProfilesAPI.Application.Settings;
+using ProfilesAPI.Application.Validators;
 using ProfilesAPI.Presentation.Controllers;
-using ProfilesAPI.Services.Mappings;
-using ProfilesAPI.Services.Settings;
-using ProfilesAPI.Services.Validators;
 using ProfilesAPI.Web.Extensions;
 using ProfilesAPI.Web.Middlewares;
 

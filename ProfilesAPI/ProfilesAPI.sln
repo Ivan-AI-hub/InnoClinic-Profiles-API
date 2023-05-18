@@ -5,19 +5,19 @@ VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfilesAPI.Domain", "ProfilesAPI.Domain\ProfilesAPI.Domain.csproj", "{D1F49351-BD26-4BAD-82E3-2FE9AFFA3A73}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfilesAPI.Services", "ProfilesAPI.Services\ProfilesAPI.Services.csproj", "{CB42AA85-69C0-4CCC-A86C-3320A710768A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfilesAPI.Application", "ProfilesAPI.Application\ProfilesAPI.Application.csproj", "{CB42AA85-69C0-4CCC-A86C-3320A710768A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfilesAPI.Services.Abstraction", "ProfilesAPI.Services.Abstraction\ProfilesAPI.Services.Abstraction.csproj", "{D1D60A72-2BF3-41BF-B65B-F9888D62976F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfilesAPI.Application.Abstraction", "ProfilesAPI.Application.Abstraction\ProfilesAPI.Application.Abstraction.csproj", "{D1D60A72-2BF3-41BF-B65B-F9888D62976F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{2E58AAFF-E3F0-4DD3-9CBB-2E8489C36961}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{022B1021-E49C-4A7A-9E11-862D1FC0243B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfilesAPI.Persistence", "ProfilesAPI.Persistence\ProfilesAPI.Persistence.csproj", "{A26B1C71-C822-4129-8746-DE741D4CC318}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfilesAPI.Persistence", "ProfilesAPI.Persistence\ProfilesAPI.Persistence.csproj", "{A26B1C71-C822-4129-8746-DE741D4CC318}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfilesAPI.Presentation", "ProfilesAPI.Presentation\ProfilesAPI.Presentation.csproj", "{276322E4-4FBB-498D-8CE4-3CC9F6990205}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfilesAPI.Presentation", "ProfilesAPI.Presentation\ProfilesAPI.Presentation.csproj", "{276322E4-4FBB-498D-8CE4-3CC9F6990205}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfilesAPI.Web", "ProfilesAPI.Web\ProfilesAPI.Web.csproj", "{DD1EF460-51E5-4509-B50E-2CF09837B53E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProfilesAPI.Web", "ProfilesAPI.Web\ProfilesAPI.Web.csproj", "{DD1EF460-51E5-4509-B50E-2CF09837B53E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

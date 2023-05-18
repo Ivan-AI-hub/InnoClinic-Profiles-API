@@ -27,8 +27,8 @@
     <ProjectReference Include="..\ProfilesAPI.Domain\ProfilesAPI.Domain.csproj" />
     <ProjectReference Include="..\ProfilesAPI.Persistence\ProfilesAPI.Persistence.csproj" />
     <ProjectReference Include="..\ProfilesAPI.Presentation\ProfilesAPI.Presentation.csproj" />
-    <ProjectReference Include="..\ProfilesAPI.Services.Abstraction\ProfilesAPI.Services.Abstraction.csproj" />
-    <ProjectReference Include="..\ProfilesAPI.Services\ProfilesAPI.Services.csproj" />
+    <ProjectReference Include="..\ProfilesAPI.Application.Abstraction\ProfilesAPI.Application.Abstraction.csproj" />
+    <ProjectReference Include="..\ProfilesAPI.Application\ProfilesAPI.Application.csproj" />
   </ItemGroup>
 
 </Project>

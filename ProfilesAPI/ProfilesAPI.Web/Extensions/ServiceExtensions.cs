@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using ProfilesAPI.Application;
+using ProfilesAPI.Application.Abstraction;
 using ProfilesAPI.Domain.Interfaces;
 using ProfilesAPI.Persistence;
 using ProfilesAPI.Persistence.Repositories;
-using ProfilesAPI.Services;
-using ProfilesAPI.Services.Abstraction;
 
 namespace ProfilesAPI.Web.Extensions
 {

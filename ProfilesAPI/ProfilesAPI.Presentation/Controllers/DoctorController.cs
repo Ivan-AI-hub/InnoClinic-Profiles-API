@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ProfilesAPI.Application.Abstraction;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
+using ProfilesAPI.Application.Abstraction.QueryableManipulation;
 using ProfilesAPI.Presentation.Models.ErrorModels;
-using ProfilesAPI.Services.Abstraction;
-using ProfilesAPI.Services.Abstraction.AggregatesModels;
-using ProfilesAPI.Services.Abstraction.AggregatesModels.DoctorAggregate;
-using ProfilesAPI.Services.Abstraction.QueryableManipulation;
+using ProfilesAPI.Application.Abstraction.AggregatesModels;
 
 namespace ProfilesAPI.Presentation.Controllers
 {
