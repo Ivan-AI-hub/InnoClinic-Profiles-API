@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using ProfilesAPI.Application.Abstraction;
-using ProfilesAPI.Application.Abstraction.AggregatesModels;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate;
-using ProfilesAPI.Application.Abstraction.QueryableManipulation;
-using ProfilesAPI.Application.Filtrators;
 using ProfilesAPI.Domain;
 using ProfilesAPI.Domain.Exceptions;
 using ProfilesAPI.Domain.Interfaces;
@@ -97,12 +95,15 @@ namespace ProfilesAPI.Application
 
         public IEnumerable<PatientDTO> GetPatients(Page page, PatientFiltrationModel filtrationModel)
         {
-            return GetFiltratedPatients(page, filtrationModel).ToList().Select(x => GetPatientDTOWithPhotoAsync(x).Result);
+            var filtrator = _mapper.Map<IFiltrator<Patient>>(filtrationModel);
+            var patients = _repositoryManager.PatientRepository.GetItems(page.Size, page.Number, filtrator);
+            return patients.ToList().Select(x => GetPatientDTOWithPhotoAsync(x).Result);
         }
 
         public IEnumerable<PatientDTO> GetPatientsInfo(Page page, PatientFiltrationModel filtrationModel)
         {
-            var patients = GetFiltratedPatients(page, filtrationModel);
+            var filtrator = _mapper.Map<IFiltrator<Patient>>(filtrationModel);
+            var patients = _repositoryManager.PatientRepository.GetItems(page.Size, page.Number, filtrator);
 
             return _mapper.Map<IEnumerable<PatientDTO>>(patients);
         }
@@ -117,15 +118,6 @@ namespace ProfilesAPI.Application
             }
 
             return patient;
-        }
-
-        private IQueryable<Patient> GetFiltratedPatients(Page page, PatientFiltrationModel filtrationModel)
-        {
-            var patients = _repositoryManager.PatientRepository.GetItems();
-            var filtrator = _mapper.Map<IFiltrator<Patient>>(filtrationModel);
-            patients = filtrator.Filtrate(patients);
-            patients = PageSeparator.GetPage(patients, page);
-            return patients;
         }
     }
 }

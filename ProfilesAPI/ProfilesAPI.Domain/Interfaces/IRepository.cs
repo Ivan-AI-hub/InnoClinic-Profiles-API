@@ -14,7 +14,7 @@ namespace ProfilesAPI.Domain.Interfaces
         public IQueryable<T> GetItemsByCondition(Expression<Func<T, bool>> predicate);
 
         /// <returns>queryable items from the database</returns>
-        public IQueryable<T> GetItems();
+        public IQueryable<T> GetItems(int pageSize, int pageNumber, IFiltrator<T> filtrator);
 
         /// <summary>
         /// Create item in database

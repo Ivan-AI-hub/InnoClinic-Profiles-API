@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using ProfilesAPI.Application.Abstraction;
-using ProfilesAPI.Application.Abstraction.AggregatesModels;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate;
-using ProfilesAPI.Application.Abstraction.QueryableManipulation;
-using ProfilesAPI.Application.Filtrators;
 using ProfilesAPI.Domain;
 using ProfilesAPI.Domain.Exceptions;
 using ProfilesAPI.Domain.Interfaces;
@@ -98,12 +96,15 @@ namespace ProfilesAPI.Application
 
         public IEnumerable<ReceptionistDTO> GetReceptionists(Page page, ReceptionistFiltrationModel filtrationModel)
         {
-            return GetFiltratedReceptionists(page, filtrationModel).ToList().Select(x => GetReceptionistDTOWithPhotoAsync(x).Result);
+            var filtrator = _mapper.Map<IFiltrator<Receptionist>>(filtrationModel);
+            var receptionists = _repositoryManager.ReceptionistRepository.GetItems(page.Size, page.Number, filtrator);
+            return receptionists.ToList().Select(x => GetReceptionistDTOWithPhotoAsync(x).Result);
         }
 
         public IEnumerable<ReceptionistDTO> GetReceptionistsInfo(Page page, ReceptionistFiltrationModel filtrationModel)
         {
-            var receptionists = GetFiltratedReceptionists(page, filtrationModel);
+            var filtrator = _mapper.Map<IFiltrator<Receptionist>>(filtrationModel);
+            var receptionists = _repositoryManager.ReceptionistRepository.GetItems(page.Size, page.Number, filtrator);
 
             return _mapper.Map<IEnumerable<ReceptionistDTO>>(receptionists);
         }
@@ -118,15 +119,6 @@ namespace ProfilesAPI.Application
             }
 
             return receptionist;
-        }
-
-        private IQueryable<Receptionist> GetFiltratedReceptionists(Page page, ReceptionistFiltrationModel filtrationModel)
-        {
-            var receptionists = _repositoryManager.ReceptionistRepository.GetItems();
-            var filtrator = _mapper.Map<IFiltrator<Receptionist>>(filtrationModel);
-            receptionists = filtrator.Filtrate(receptionists);
-            receptionists = PageSeparator.GetPage(receptionists, page);
-            return receptionists;
         }
     }
 }

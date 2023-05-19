@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
-using ProfilesAPI.Application.Abstraction.AggregatesModels;
 
-namespace ProfilesAPI.Application.Abstraction
+namespace ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate
 {
     public interface IBlobService
     {

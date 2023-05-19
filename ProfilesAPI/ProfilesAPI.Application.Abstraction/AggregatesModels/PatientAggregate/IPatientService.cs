@@ -1,8 +1,4 @@
-﻿using ProfilesAPI.Application.Abstraction.AggregatesModels;
-using ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate;
-using ProfilesAPI.Application.Abstraction.QueryableManipulation;
-
-namespace ProfilesAPI.Application.Abstraction
+﻿namespace ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate
 {
     public interface IPatientService
     {

@@ -1,4 +1,5 @@
-﻿using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
+﻿using ProfilesAPI.Application.Abstraction.AggregatesModels.HumanInfoAggregate;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.OfficeAggregate;
 
 namespace ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate
 {

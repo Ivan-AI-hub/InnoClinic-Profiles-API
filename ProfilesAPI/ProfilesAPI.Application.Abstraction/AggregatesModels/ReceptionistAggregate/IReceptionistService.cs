@@ -1,8 +1,4 @@
-﻿using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate;
-using ProfilesAPI.Application.Abstraction.AggregatesModels;
-using ProfilesAPI.Application.Abstraction.QueryableManipulation;
-
-namespace ProfilesAPI.Application.Abstraction
+﻿namespace ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate
 {
     public interface IReceptionistService
     {

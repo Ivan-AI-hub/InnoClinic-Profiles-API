@@ -1,4 +1,4 @@
-﻿namespace ProfilesAPI.Application.Abstraction.AggregatesModels
+﻿namespace ProfilesAPI.Application.Abstraction
 {
     public class Page
     {

@@ -1,6 +1,6 @@
-﻿namespace ProfilesAPI.Application.Abstraction.QueryableManipulation
+﻿namespace ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate
 {
-    public class ReceptionistFiltrationModel
+    public class PatientFiltrationModel
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }

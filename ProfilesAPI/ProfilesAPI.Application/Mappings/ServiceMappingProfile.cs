@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
-using ProfilesAPI.Application.Abstraction.AggregatesModels;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.HumanInfoAggregate;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.OfficeAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate;
-using ProfilesAPI.Application.Abstraction.QueryableManipulation;
 using ProfilesAPI.Application.Filtrators;
 using ProfilesAPI.Domain;
+using ProfilesAPI.Domain.Interfaces;
 
 namespace ProfilesAPI.Application.Mappings
 {

@@ -2,7 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ProfilesAPI.Application;
-using ProfilesAPI.Application.Abstraction;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate;
 using ProfilesAPI.Domain.Interfaces;
 using ProfilesAPI.Persistence;
 using ProfilesAPI.Persistence.Repositories;

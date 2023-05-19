@@ -1,4 +1,4 @@
-﻿namespace ProfilesAPI.Application.Filtrators
+﻿namespace ProfilesAPI.Domain.Interfaces
 {
     public interface IFiltrator<T>
     {

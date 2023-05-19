@@ -28,7 +28,7 @@ namespace ProfilesAPI.Persistence.Repositories
 
         public async Task UpdateStatusAsync(Guid id, WorkStatus status, CancellationToken cancellationToken = default)
         {
-            var doctor = await Context.Doctors.FirstOrDefaultAsync(x => x.Id == id);
+            var doctor = await Context.Doctors.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (doctor == null)
             {
@@ -36,24 +36,19 @@ namespace ProfilesAPI.Persistence.Repositories
             }
 
             doctor.Status = status;
-            await Context.SaveChangesAsync();
+            await Context.SaveChangesAsync(cancellationToken);
         }
 
         public override Task<Doctor?> GetItemAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var doctors = GetItems();
+            var doctors = GetFullDataQueryable();
             return doctors.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        }
-
-        public override IQueryable<Doctor> GetItems()
-        {
-            var doctors = Context.Doctors.Include(x => x.Info);
-            return doctors.AsNoTracking();
         }
 
         public override async Task UpdateAsync(Guid id, Doctor updatedItem)
         {
-            var doctor = Context.Doctors.FirstOrDefault(x => x.Id == id);
+            var doctor = Context.Doctors.Include(x => x.Info)
+                                        .FirstOrDefault(x => x.Id == id);
 
             if (doctor == null)
             {
@@ -71,6 +66,11 @@ namespace ProfilesAPI.Persistence.Repositories
             doctor.Status = updatedItem.Status;
 
             await Context.SaveChangesAsync();
+        }
+
+        protected override IQueryable<Doctor> GetFullDataQueryable()
+        {
+            return Context.Doctors.Include(x => x.Info).AsNoTracking();
         }
     }
 }

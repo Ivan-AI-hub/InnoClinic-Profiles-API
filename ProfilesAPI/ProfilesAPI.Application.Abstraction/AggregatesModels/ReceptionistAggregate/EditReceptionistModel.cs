@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
 
 namespace ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate
 {

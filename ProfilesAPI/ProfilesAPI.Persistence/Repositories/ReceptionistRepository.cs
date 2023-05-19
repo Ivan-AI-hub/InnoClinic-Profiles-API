@@ -28,19 +28,15 @@ namespace ProfilesAPI.Persistence.Repositories
 
         public override Task<Receptionist?> GetItemAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var receptionists = GetItems();
+            var receptionists = GetFullDataQueryable();
             return receptionists.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        }
-
-        public override IQueryable<Receptionist> GetItems()
-        {
-            var receptionists = Context.Receptionists.Include(x => x.Info);
-            return receptionists.AsNoTracking();
         }
 
         public override async Task UpdateAsync(Guid id, Receptionist updatedItem)
         {
-            var receptionist = await Context.Receptionists.FirstOrDefaultAsync(x => x.Id == id);
+            var receptionist = await Context.Receptionists
+                                            .Include(x => x.Info)
+                                            .FirstOrDefaultAsync(x => x.Id == id);
 
             if (receptionist == null)
             {
@@ -55,6 +51,11 @@ namespace ProfilesAPI.Persistence.Repositories
             receptionist.Office.Id = updatedItem.Office.Id;
 
             await Context.SaveChangesAsync();
+        }
+
+        protected override IQueryable<Receptionist> GetFullDataQueryable()
+        {
+            return Context.Receptionists.Include(x => x.Info).AsNoTracking();
         }
     }
 }

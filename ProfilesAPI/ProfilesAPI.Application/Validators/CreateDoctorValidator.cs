@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
-using ProfilesAPI.Application.Validators;
 
 namespace ProfilesAPI.Application.Validators
 {

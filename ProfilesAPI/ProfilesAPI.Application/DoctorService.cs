@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using ProfilesAPI.Application.Abstraction;
-using ProfilesAPI.Application.Abstraction.AggregatesModels;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
-using ProfilesAPI.Application.Abstraction.QueryableManipulation;
-using ProfilesAPI.Application.Filtrators;
 using ProfilesAPI.Domain;
 using ProfilesAPI.Domain.Exceptions;
 using ProfilesAPI.Domain.Interfaces;
@@ -87,12 +85,15 @@ namespace ProfilesAPI.Application
 
         public IEnumerable<DoctorDTO> GetDoctors(Page page, DoctorFiltrationModel filtrationModel)
         {
-            return GetFiltratedDoctors(page, filtrationModel).ToList().Select(x => GetDoctorDTOWithPhotoAsync(x).Result);
+            var filtrator = _mapper.Map<IFiltrator<Doctor>>(filtrationModel);
+            var doctors = _repositoryManager.DoctorRepository.GetItems(page.Size, page.Number, filtrator);
+            return doctors.ToList().Select(x => GetDoctorDTOWithPhotoAsync(x).Result);
         }
 
         public IEnumerable<DoctorDTO> GetDoctorsInfo(Page page, DoctorFiltrationModel filtrationModel)
         {
-            var doctors = GetFiltratedDoctors(page, filtrationModel);
+            var filtrator = _mapper.Map<IFiltrator<Doctor>>(filtrationModel);
+            var doctors = _repositoryManager.DoctorRepository.GetItems(page.Size, page.Number, filtrator);
 
             return _mapper.Map<IEnumerable<DoctorDTO>>(doctors);
         }
@@ -107,15 +108,6 @@ namespace ProfilesAPI.Application
             }
 
             return doctor;
-        }
-
-        private IQueryable<Doctor> GetFiltratedDoctors(Page page, DoctorFiltrationModel filtrationModel)
-        {
-            var doctors = _repositoryManager.DoctorRepository.GetItems();
-            var filtrator = _mapper.Map<IFiltrator<Doctor>>(filtrationModel);
-            doctors = filtrator.Filtrate(doctors);
-            doctors = PageSeparator.GetPage(doctors, page);
-            return doctors;
         }
     }
 }

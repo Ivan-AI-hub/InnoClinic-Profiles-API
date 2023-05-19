@@ -1,4 +1,6 @@
-﻿namespace ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate
+﻿using ProfilesAPI.Application.Abstraction.AggregatesModels.HumanInfoAggregate;
+
+namespace ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate
 {
     public class PatientDTO
     {

@@ -28,19 +28,14 @@ namespace ProfilesAPI.Persistence.Repositories
 
         public override Task<Patient?> GetItemAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var patients = GetItems();
+            var patients = GetFullDataQueryable();
             return patients.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-        }
-
-        public override IQueryable<Patient> GetItems()
-        {
-            var patients = Context.Patients.Include(x => x.Info);
-            return patients.AsNoTracking();
         }
 
         public override async Task UpdateAsync(Guid id, Patient updatedItem)
         {
-            var patient = await Context.Patients.FirstOrDefaultAsync(x => x.Id == id);
+            var patient = await Context.Patients.Include(x => x.Info)
+                                                .FirstOrDefaultAsync(x => x.Id == id);
 
             if (patient == null)
             {
@@ -55,6 +50,11 @@ namespace ProfilesAPI.Persistence.Repositories
             patient.PhoneNumber = updatedItem.PhoneNumber;
 
             await Context.SaveChangesAsync();
+        }
+
+        protected override IQueryable<Patient> GetFullDataQueryable()
+        {
+            return Context.Patients.Include(x => x.Info).AsNoTracking();
         }
     }
 }

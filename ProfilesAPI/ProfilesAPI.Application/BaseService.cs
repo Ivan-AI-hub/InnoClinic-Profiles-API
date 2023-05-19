@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
-using ProfilesAPI.Application.Abstraction;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
+using ProfilesAPI.Application.Exceptions;
 using ProfilesAPI.Domain.Exceptions;
 using ProfilesAPI.Domain.Interfaces;
-using ProfilesAPI.Application.Exceptions;
 
 namespace ProfilesAPI.Application
 {
-    public class BaseService
+    public abstract class BaseService
     {
         protected IBlobService _blobService;
         protected IRepositoryManager _repositoryManager;

@@ -1,8 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using ProfilesAPI.Application.Abstraction;
-using ProfilesAPI.Application.Abstraction.AggregatesModels;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
 using ProfilesAPI.Application.Settings;
 
 namespace ProfilesAPI.Application

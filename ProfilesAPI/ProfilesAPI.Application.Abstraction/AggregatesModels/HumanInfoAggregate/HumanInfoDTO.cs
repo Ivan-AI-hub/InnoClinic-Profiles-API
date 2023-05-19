@@ -1,4 +1,6 @@
-﻿namespace ProfilesAPI.Application.Abstraction.AggregatesModels
+﻿using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
+
+namespace ProfilesAPI.Application.Abstraction.AggregatesModels.HumanInfoAggregate
 {
     public class HumanInfoDTO
     {

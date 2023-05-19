@@ -1,4 +1,4 @@
-﻿namespace ProfilesAPI.Application.Abstraction.QueryableManipulation
+﻿namespace ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate
 {
     public class DoctorFiltrationModel
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace ProfilesAPI.Application.Abstraction.AggregatesModels
+namespace ProfilesAPI.Application.Abstraction.AggregatesModels.HumanInfoAggregate
 {
     public class CreateHumanInfo
     {
