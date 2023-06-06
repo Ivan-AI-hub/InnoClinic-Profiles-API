@@ -19,7 +19,7 @@ namespace ProfilesAPI.Presentation.Controllers
         [ProducesResponseType(typeof(PatientDTO), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public async Task<IActionResult> CreateAsync([FromForm] CreatePatientModel createModel, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAsync(CreatePatientModel createModel, CancellationToken cancellationToken = default)
         {
             var patient = await _patientService.CreatePatientAsync(createModel, cancellationToken);
             return Ok(patient);
@@ -29,7 +29,7 @@ namespace ProfilesAPI.Presentation.Controllers
         [ProducesResponseType(202)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public async Task<IActionResult> EditAsync(Guid id, [FromForm] EditPatientModel editModel, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> EditAsync(Guid id, EditPatientModel editModel, CancellationToken cancellationToken = default)
         {
             await _patientService.EditPatientAsync(id, editModel, cancellationToken);
             return Accepted();

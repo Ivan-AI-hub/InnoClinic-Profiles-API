@@ -36,7 +36,8 @@ namespace ProfilesAPI.Application
             var patient = _mapper.Map<Patient>(model);
 
             await _repositoryManager.PatientRepository.CreateAsync(patient);
-            await _publishEndpoint.Publish(new PatientCreated(patient.Id, patient.Info.Email));
+            await _publishEndpoint.Publish(new PatientCreated(patient.Id, patient.Info.Email, patient.Info.FirstName,
+                                            patient.Info.MiddleName, patient.Info.LastName, patient.PhoneNumber, patient.Info.BirthDay));
 
             return _mapper.Map<PatientDTO>(patient);
         }
@@ -50,6 +51,7 @@ namespace ProfilesAPI.Application
             }
 
             await _repositoryManager.PatientRepository.DeleteAsync(id);
+            await _publishEndpoint.Publish(new PatientDeleted(id));
         }
 
         public async Task EditPatientAsync(Guid id, EditPatientModel model, CancellationToken cancellationToken = default)
@@ -59,6 +61,8 @@ namespace ProfilesAPI.Application
 
             var patient = _mapper.Map<Patient>(model);
             await _repositoryManager.PatientRepository.UpdateAsync(id, patient);
+            await _publishEndpoint.Publish(new PatientUpdated(id, patient.Info.FirstName, patient.Info.MiddleName,
+                                                            patient.Info.LastName, patient.PhoneNumber, patient.Info.BirthDay));
         }
 
         public async Task<PatientDTO> GetPatientAsync(Guid id, CancellationToken cancellationToken = default)

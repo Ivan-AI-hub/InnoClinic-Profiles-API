@@ -19,7 +19,7 @@ namespace ProfilesAPI.Presentation.Controllers
         [ProducesResponseType(typeof(DoctorDTO), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public async Task<IActionResult> CreateAsync([FromForm] CreateDoctorModel createModel, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAsync(CreateDoctorModel createModel, CancellationToken cancellationToken = default)
         {
             var doctor = await _doctorService.CreateDoctorAsync(createModel, cancellationToken);
             return Ok(doctor);
@@ -29,7 +29,7 @@ namespace ProfilesAPI.Presentation.Controllers
         [ProducesResponseType(202)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public async Task<IActionResult> EditAsync(Guid id, [FromForm] EditDoctorModel editModel, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> EditAsync(Guid id, EditDoctorModel editModel, CancellationToken cancellationToken = default)
         {
             await _doctorService.EditDoctorAsync(id, editModel, cancellationToken);
             return Accepted();
