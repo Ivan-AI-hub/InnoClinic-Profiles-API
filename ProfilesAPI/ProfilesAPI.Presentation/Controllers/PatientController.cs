@@ -63,14 +63,5 @@ namespace ProfilesAPI.Presentation.Controllers
             var patient = _patientService.GetPatients(new Page(pageNumber, pageSize), filtrationModel);
             return Ok(patient);
         }
-
-        [HttpGet("{pageSize}/{pageNumber}/info")]
-        [ProducesResponseType(typeof(PatientDTO), 200)]
-        [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public IActionResult GetPatientsInfo(int pageSize, int pageNumber, [FromQuery] PatientFiltrationModel filtrationModel)
-        {
-            var patient = _patientService.GetPatientsInfo(new Page(pageNumber, pageSize), filtrationModel);
-            return Ok(patient);
-        }
     }
 }

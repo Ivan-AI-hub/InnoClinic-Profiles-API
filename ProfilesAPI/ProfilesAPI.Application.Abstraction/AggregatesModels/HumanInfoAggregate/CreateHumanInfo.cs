@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace ProfilesAPI.Application.Abstraction.AggregatesModels.HumanInfoAggregate
+﻿namespace ProfilesAPI.Application.Abstraction.AggregatesModels.HumanInfoAggregate
 {
     public class CreateHumanInfo
     {
-        public IFormFile? Photo { get; set; }
+        public PictureDTO? Photo { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public DateTime BirthDay { get; set; }
         public CreateHumanInfo() { }
-        public CreateHumanInfo(IFormFile? photo, string email, string firstName, string lastName, string middleName, DateTime birthDay)
+        public CreateHumanInfo(PictureDTO? photo, string email, string firstName, string lastName, string middleName, DateTime birthDay)
         {
             Photo = photo;
             Email = email;

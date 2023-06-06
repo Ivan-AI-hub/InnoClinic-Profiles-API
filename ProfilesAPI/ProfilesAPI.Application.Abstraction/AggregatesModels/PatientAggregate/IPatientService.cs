@@ -7,6 +7,5 @@
         Task EditPatientAsync(Guid id, EditPatientModel model, CancellationToken cancellationToken = default);
         Task<PatientDTO> GetPatientAsync(Guid id, CancellationToken cancellationToken = default);
         IEnumerable<PatientDTO> GetPatients(Page page, PatientFiltrationModel filtrationModel);
-        IEnumerable<PatientDTO> GetPatientsInfo(Page page, PatientFiltrationModel filtrationModel);
     }
 }

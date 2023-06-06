@@ -7,6 +7,5 @@
         Task EditReceptionistAsync(Guid id, EditReceptionistModel model, CancellationToken cancellationToken = default);
         Task<ReceptionistDTO> GetReceptionistAsync(Guid id, CancellationToken cancellationToken = default);
         IEnumerable<ReceptionistDTO> GetReceptionists(Page page, ReceptionistFiltrationModel filtrationModel);
-        IEnumerable<ReceptionistDTO> GetReceptionistsInfo(Page page, ReceptionistFiltrationModel filtrationModel);
     }
 }

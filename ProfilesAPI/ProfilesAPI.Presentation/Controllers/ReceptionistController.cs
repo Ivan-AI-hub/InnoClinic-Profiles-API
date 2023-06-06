@@ -63,14 +63,5 @@ namespace ProfilesAPI.Presentation.Controllers
             var receptionist = _receptionistService.GetReceptionists(new Page(pageNumber, pageSize), filtrationModel);
             return Ok(receptionist);
         }
-
-        [HttpGet("{pageSize}/{pageNumber}/info")]
-        [ProducesResponseType(typeof(ReceptionistDTO), 200)]
-        [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public IActionResult GetReceptionistsInfo(int pageSize, int pageNumber, [FromQuery] ReceptionistFiltrationModel filtrationModel)
-        {
-            var receptionist = _receptionistService.GetReceptionistsInfo(new Page(pageNumber, pageSize), filtrationModel);
-            return Ok(receptionist);
-        }
     }
 }

@@ -20,7 +20,7 @@ namespace ProfilesAPI.Application.Mappings
             CreateMap<CreatePatientModel, Patient>();
             CreateMap<EditPatientModel, Patient>().ForMember(x => x.Info,
                     s => s.MapFrom(t => new HumanInfo("", t.FirstName, t.LastName, t.MiddleName, t.BirthDay)
-                    { Photo = t.Photo != null ? new Picture(t.Photo.FileName) : null }));
+                    { Photo = t.Photo != null ? new Picture(t.Photo.Name) : null }));
 
             CreateMap<Doctor, DoctorDTO>();
             CreateMap<DoctorFiltrationModel, IFiltrator<Doctor>>().As<DoctorFiltrator>();
@@ -29,7 +29,7 @@ namespace ProfilesAPI.Application.Mappings
             CreateMap<EditDoctorModel, Doctor>()
                 .ForMember(x => x.Info,
                 s => s.MapFrom(t => new HumanInfo("", t.FirstName, t.LastName, t.MiddleName, t.BirthDay)
-                { Photo = t.Photo != null ? new Picture(t.Photo.FileName) : null }))
+                { Photo = t.Photo != null ? new Picture(t.Photo.Name) : null }))
                 .ForMember(x => x.Office, s => s.MapFrom(t => new Office(t.OfficeId)));
 
             CreateMap<Receptionist, ReceptionistDTO>();
@@ -39,15 +39,14 @@ namespace ProfilesAPI.Application.Mappings
             CreateMap<EditReceptionistModel, Receptionist>()
                 .ForMember(x => x.Info,
                 s => s.MapFrom(t => new HumanInfo("", t.FirstName, t.LastName, t.MiddleName, t.BirthDay)
-                { Photo = t.Photo != null ? new Picture(t.Photo.FileName) : null }))
+                { Photo = t.Photo != null ? new Picture(t.Photo.Name) : null }))
                 .ForMember(x => x.Office, s => s.MapFrom(t => new Office(t.OfficeId)));
 
             CreateMap<Office, OfficeDTO>().ReverseMap();
 
+            CreateMap<Picture, PictureDTO>().ReverseMap();
             CreateMap<HumanInfo, HumanInfoDTO>().ForMember(s => s.Photo, r => r.Ignore());
-            CreateMap<CreateHumanInfo, HumanInfo>()
-                .ForMember(s => s.Photo, r => r.MapFrom(t => new Picture(t.Photo.FileName)))
-                .ReverseMap();
+            CreateMap<CreateHumanInfo, HumanInfo>().ReverseMap();
         }
     }
 }

@@ -1,7 +1,4 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.Http;
-using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
-using ProfilesAPI.Application.Exceptions;
 using ProfilesAPI.Domain.Exceptions;
 using ProfilesAPI.Domain.Interfaces;
 
@@ -9,23 +6,12 @@ namespace ProfilesAPI.Application
 {
     public abstract class BaseService
     {
-        protected IBlobService _blobService;
         protected IRepositoryManager _repositoryManager;
 
-        public BaseService(IBlobService blobService, IRepositoryManager repositoryManager)
+        public BaseService(IRepositoryManager repositoryManager)
         {
-            _blobService = blobService;
             _repositoryManager = repositoryManager;
         }
-
-        protected async Task ValidateBlobFileName(IFormFile? file, CancellationToken cancellationToken = default)
-        {
-            if (file != null && await _blobService.IsBlobExist(file.FileName, cancellationToken))
-            {
-                throw new BlobNameIsNotValidException(file.FileName);
-            }
-        }
-
         protected async Task ValidateEmailAsync(string email, CancellationToken cancellationToken = default)
         {
             var isEmailInvalid = await _repositoryManager.HumanInfoRepository.IsExistAsync(x => x.Email == email, cancellationToken);

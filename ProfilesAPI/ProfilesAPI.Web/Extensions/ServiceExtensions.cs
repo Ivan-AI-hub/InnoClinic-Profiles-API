@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ProfilesAPI.Application;
-using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate;
@@ -32,7 +31,6 @@ namespace ProfilesAPI.Web.Extensions
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IReceptionistService, ReceptionistService>();
-            services.AddScoped<IBlobService, BlobService>();
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)

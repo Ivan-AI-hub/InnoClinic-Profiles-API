@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using ProfilesAPI.Application.Abstraction.AggregatesModels.HumanInfoAggregate;
 
 namespace ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate
 {
-    public record EditPatientModel(IFormFile? Photo,
+    public record EditPatientModel(PictureDTO? Photo,
                                      string FirstName,
                                      string LastName,
                                      string MiddleName,

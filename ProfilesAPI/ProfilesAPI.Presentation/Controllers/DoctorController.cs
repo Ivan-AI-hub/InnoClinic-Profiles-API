@@ -63,14 +63,5 @@ namespace ProfilesAPI.Presentation.Controllers
             var doctors = _doctorService.GetDoctors(new Page(pageNumber, pageSize), filtrationModel);
             return Ok(doctors);
         }
-
-        [HttpGet("{pageSize}/{pageNumber}/info")]
-        [ProducesResponseType(typeof(DoctorDTO), 200)]
-        [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public IActionResult GetDoctorsInfoAsync(int pageSize, int pageNumber, [FromQuery] DoctorFiltrationModel filtrationModel)
-        {
-            var doctors = _doctorService.GetDoctorsInfo(new Page(pageNumber, pageSize), filtrationModel);
-            return Ok(doctors);
-        }
     }
 }

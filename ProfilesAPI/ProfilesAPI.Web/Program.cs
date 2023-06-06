@@ -1,6 +1,5 @@
 using FluentValidation;
 using ProfilesAPI.Application.Mappings;
-using ProfilesAPI.Application.Settings;
 using ProfilesAPI.Application.Validators;
 using ProfilesAPI.Presentation.Controllers;
 using ProfilesAPI.Web.Extensions;
@@ -23,9 +22,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAuthorization();
 builder.Services.AddAutoMapper(typeof(ServiceMappingProfile));
 builder.Services.AddValidatorsFromAssemblyContaining<CreatePatientValidator>();
-
-
-builder.Services.Configure<BlobStorageSettings>(builder.Configuration.GetSection("BlobStorageConfig"));
 
 var app = builder.Build();
 
