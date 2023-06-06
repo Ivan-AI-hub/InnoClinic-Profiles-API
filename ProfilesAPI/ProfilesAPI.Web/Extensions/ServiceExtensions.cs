@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ProfilesAPI.Application;
@@ -9,6 +10,7 @@ using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate
 using ProfilesAPI.Domain.Interfaces;
 using ProfilesAPI.Persistence;
 using ProfilesAPI.Persistence.Repositories;
+using ProfilesAPI.Web.Settings;
 
 namespace ProfilesAPI.Web.Extensions
 {
@@ -41,7 +43,23 @@ namespace ProfilesAPI.Web.Extensions
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             });
         }
-
+        public static void ConfigureMassTransit(this IServiceCollection services, IConfiguration configuration, string massTransitSettingsName)
+        {
+            var settings = configuration.GetSection(massTransitSettingsName).Get<MassTransitSettings>();
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host(settings.Host, settings.VirtualHost, h =>
+                    {
+                        h.Username(settings.UserName);
+                        h.Password(settings.Password);
+                    });
+                    cfg.AddRawJsonSerializer();
+                    cfg.ConfigureEndpoints(context);
+                });
+            });
+        }
         public static void ConfigureSwagger(this IServiceCollection services)
         {
             services.AddSwaggerGen(s =>

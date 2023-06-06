@@ -69,7 +69,7 @@ namespace ProfilesAPI.Application
         public async Task<bool> IsBlobExist(string blobFileName, CancellationToken cancellationToken = default)
         {
             BlobContainerClient container = new BlobContainerClient(_blobStorageSettings.ConnectionString, _blobStorageSettings.ImagesContainerName);
-
+    
             BlobClient file = container.GetBlobClient(blobFileName);
             return await file.ExistsAsync(cancellationToken);
         }

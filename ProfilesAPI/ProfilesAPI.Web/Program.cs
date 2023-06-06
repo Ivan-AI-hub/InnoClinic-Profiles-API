@@ -9,6 +9,7 @@ using ProfilesAPI.Web.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureSqlContext(builder.Configuration, "DefaultConnection");
+builder.Services.ConfigureMassTransit(builder.Configuration, "MassTransitSettings");
 
 builder.Services.ConfigureRepositoryManager();
 builder.Services.ConfigureSwagger();

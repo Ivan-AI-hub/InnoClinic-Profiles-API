@@ -1,27 +1,32 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using MassTransit;
 using ProfilesAPI.Application.Abstraction;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.BlobAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate;
 using ProfilesAPI.Domain;
 using ProfilesAPI.Domain.Exceptions;
 using ProfilesAPI.Domain.Interfaces;
+using SharedEvents.Models;
 
 namespace ProfilesAPI.Application
 {
     public class PatientService : BaseService, IPatientService
     {
-        private IMapper _mapper;
-        private IValidator<CreatePatientModel> _createPatientValidator;
-        private IValidator<EditPatientModel> _editPatientValidator;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMapper _mapper;
+        private readonly IValidator<CreatePatientModel> _createPatientValidator;
+        private readonly IValidator<EditPatientModel> _editPatientValidator;
 
         public PatientService(IRepositoryManager repositoryManager, IBlobService blobService, IMapper mapper,
-            IValidator<CreatePatientModel> createPatientValidator, IValidator<EditPatientModel> editPatientValidator) : base(blobService, repositoryManager)
+            IValidator<CreatePatientModel> createPatientValidator, IValidator<EditPatientModel> editPatientValidator, 
+            IPublishEndpoint publishEndpoint) : base(blobService, repositoryManager)
         {
             _mapper = mapper;
             _createPatientValidator = createPatientValidator;
             _editPatientValidator = editPatientValidator;
             _blobService = blobService;
+            _publishEndpoint = publishEndpoint;
         }
 
         public async Task<PatientDTO> CreatePatientAsync(CreatePatientModel model, CancellationToken cancellationToken = default)
@@ -29,6 +34,7 @@ namespace ProfilesAPI.Application
             await ValidateBlobFileName(model.Info.Photo, cancellationToken);
             await ValidateModel(model, _createPatientValidator, cancellationToken);
             await ValidateEmailAsync(model.Info.Email, cancellationToken);
+            await ValidatePhoneNumber(model.PhoneNumber, default, cancellationToken);
 
             var patient = _mapper.Map<Patient>(model);
 
@@ -39,6 +45,7 @@ namespace ProfilesAPI.Application
                 await _blobService.UploadAsync(model.Info.Photo);
             }
 
+            await _publishEndpoint.Publish(new PatientCreated(patient.Id, patient.Info.Email));
             return await GetPatientDTOWithPhotoAsync(patient, cancellationToken);
         }
 
@@ -61,6 +68,7 @@ namespace ProfilesAPI.Application
         {
             await ValidateBlobFileName(model.Photo, cancellationToken);
             await ValidateModel(model, _editPatientValidator, cancellationToken);
+            await ValidatePhoneNumber(model.PhoneNumber, id, cancellationToken);
 
             var oldPatient = await _repositoryManager.PatientRepository.GetItemAsync(id, cancellationToken);
             if (oldPatient == null)
@@ -118,6 +126,15 @@ namespace ProfilesAPI.Application
             }
 
             return patient;
+        }
+
+        private async Task ValidatePhoneNumber(string phoneNumber, Guid excludeId = default, CancellationToken cancellationToken = default)
+        {
+            var isPhoneNumberInvalid = await _repositoryManager.PatientRepository.IsItemExistAsync(x => x.PhoneNumber == phoneNumber && x.Id != excludeId, cancellationToken);
+            if (isPhoneNumberInvalid)
+            {
+                throw new ProfileWithSameEmailExistException(phoneNumber);
+            }
         }
     }
 }
