@@ -10,9 +10,9 @@ namespace ProfilesAPI.Application
 {
     public class ReceptionistService : BaseService, IReceptionistService
     {
-        private IMapper _mapper;
-        private IValidator<CreateReceptionistModel> _createReceptionistValidator;
-        private IValidator<EditReceptionistModel> _editReceptionistModel;
+        private readonly IMapper _mapper;
+        private readonly IValidator<CreateReceptionistModel> _createReceptionistValidator;
+        private readonly IValidator<EditReceptionistModel> _editReceptionistModel;
 
         public ReceptionistService(IRepositoryManager repositoryManager, IMapper mapper,
             IValidator<CreateReceptionistModel> createReceptionistValidator,

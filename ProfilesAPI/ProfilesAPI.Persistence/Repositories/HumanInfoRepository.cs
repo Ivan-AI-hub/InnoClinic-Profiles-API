@@ -7,7 +7,7 @@ namespace ProfilesAPI.Persistence.Repositories
 {
     public class HumanInfoRepository : IHumanInfoRepository
     {
-        private ProfilesContext _context;
+        private readonly ProfilesContext _context;
         public HumanInfoRepository(ProfilesContext context)
         {
             _context = context;

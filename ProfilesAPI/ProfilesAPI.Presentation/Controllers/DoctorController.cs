@@ -9,7 +9,7 @@ namespace ProfilesAPI.Presentation.Controllers
     [Route("/doctors/")]
     public class DoctorController : ControllerBase
     {
-        private IDoctorService _doctorService;
+        private readonly IDoctorService _doctorService;
         public DoctorController(IDoctorService doctorService)
         {
             _doctorService = doctorService;

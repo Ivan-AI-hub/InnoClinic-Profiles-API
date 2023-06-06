@@ -4,10 +4,10 @@ namespace ProfilesAPI.Persistence.Repositories
 {
     public class RepositoryManager : IRepositoryManager
     {
-        private Lazy<IPatientRepository> _patientRepository;
-        private Lazy<IReceptionistRepository> _receptionistRepository;
-        private Lazy<IDoctorRepository> _doctorRepository;
-        private Lazy<IHumanInfoRepository> _humanInfoRepository;
+        private readonly Lazy<IPatientRepository> _patientRepository;
+        private readonly Lazy<IReceptionistRepository> _receptionistRepository;
+        private readonly Lazy<IDoctorRepository> _doctorRepository;
+        private readonly Lazy<IHumanInfoRepository> _humanInfoRepository;
 
         public RepositoryManager(ProfilesContext context)
         {

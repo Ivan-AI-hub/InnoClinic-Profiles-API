@@ -12,10 +12,10 @@ namespace ProfilesAPI.Application
 {
     public class DoctorService : BaseService, IDoctorService
     {
-        private IPublishEndpoint _publishEndpoint;
-        private IMapper _mapper;
-        private IValidator<CreateDoctorModel> _createDoctorValidator;
-        private IValidator<EditDoctorModel> _editDoctorModel;
+        private readonly IPublishEndpoint _publishEndpoint;
+        private readonly IMapper _mapper;
+        private readonly IValidator<CreateDoctorModel> _createDoctorValidator;
+        private readonly IValidator<EditDoctorModel> _editDoctorModel;
 
         public DoctorService(IPublishEndpoint publishEndpoint, IRepositoryManager repositoryManager, IMapper mapper,
             IValidator<CreateDoctorModel> createDoctorValidator, IValidator<EditDoctorModel> editDoctorModel) : base(repositoryManager)
