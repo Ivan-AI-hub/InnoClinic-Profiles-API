@@ -16,38 +16,39 @@ namespace ProfilesAPI.Presentation.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(PatientDTO), 200)]
+        [ProducesResponseType(typeof(PatientDTO), 201)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
         public async Task<IActionResult> CreateAsync(CreatePatientModel createModel, CancellationToken cancellationToken = default)
         {
             var patient = await _patientService.CreatePatientAsync(createModel, cancellationToken);
-            return Ok(patient);
+            return CreatedAtAction(nameof(GetPatientAsync), new { id = patient.Id }, patient); ;
         }
 
         [HttpPut("{id}")]
-        [ProducesResponseType(202)]
+        [ProducesResponseType(204)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
+        [ProducesResponseType(typeof(ErrorDetails), 404)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
         public async Task<IActionResult> EditAsync(Guid id, EditPatientModel editModel, CancellationToken cancellationToken = default)
         {
             await _patientService.EditPatientAsync(id, editModel, cancellationToken);
-            return Accepted();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(typeof(ErrorDetails), 400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(typeof(ErrorDetails), 404)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
         public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
             await _patientService.DeletePatientAsync(id, cancellationToken);
-            return Ok();
+            return NoContent();
         }
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(PatientDTO), 200)]
-        [ProducesResponseType(typeof(ErrorDetails), 400)]
+        [ProducesResponseType(typeof(ErrorDetails), 404)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
         public async Task<IActionResult> GetPatientAsync(Guid id, CancellationToken cancellationToken = default)
         {
@@ -58,9 +59,9 @@ namespace ProfilesAPI.Presentation.Controllers
         [HttpGet("{pageSize}/{pageNumber}")]
         [ProducesResponseType(typeof(PatientDTO), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public IActionResult GetPatients(int pageSize, int pageNumber, [FromQuery] PatientFiltrationModel filtrationModel)
+        public async Task<IActionResult> GetPatients(int pageSize, int pageNumber, [FromQuery] PatientFiltrationModel filtrationModel, CancellationToken cancellationToken = default)
         {
-            var patient = _patientService.GetPatients(new Page(pageNumber, pageSize), filtrationModel);
+            var patient = await _patientService.GetPatientsAsync(new Page(pageNumber, pageSize), filtrationModel, cancellationToken);
             return Ok(patient);
         }
     }

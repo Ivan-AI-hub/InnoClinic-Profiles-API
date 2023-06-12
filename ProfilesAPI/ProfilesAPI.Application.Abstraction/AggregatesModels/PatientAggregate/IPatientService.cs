@@ -6,6 +6,6 @@
         Task DeletePatientAsync(Guid id, CancellationToken cancellationToken = default);
         Task EditPatientAsync(Guid id, EditPatientModel model, CancellationToken cancellationToken = default);
         Task<PatientDTO> GetPatientAsync(Guid id, CancellationToken cancellationToken = default);
-        IEnumerable<PatientDTO> GetPatients(Page page, PatientFiltrationModel filtrationModel);
+        Task<IEnumerable<PatientDTO>> GetPatientsAsync(Page page, PatientFiltrationModel filtrationModel, CancellationToken cancellationToken = default);
     }
 }

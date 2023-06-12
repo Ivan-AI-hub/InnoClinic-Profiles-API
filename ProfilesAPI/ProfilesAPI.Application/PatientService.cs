@@ -35,9 +35,9 @@ namespace ProfilesAPI.Application
 
             var patient = _mapper.Map<Patient>(model);
 
-            await _repositoryManager.PatientRepository.CreateAsync(patient);
+            await _repositoryManager.PatientRepository.CreateAsync(patient, cancellationToken);
             await _publishEndpoint.Publish(new PatientCreated(patient.Id, patient.Info.Email, patient.Info.FirstName,
-                                            patient.Info.MiddleName, patient.Info.LastName, patient.PhoneNumber, patient.Info.BirthDay));
+                                            patient.Info.MiddleName, patient.Info.LastName, patient.PhoneNumber, patient.Info.BirthDay), cancellationToken);
 
             return _mapper.Map<PatientDTO>(patient);
         }
@@ -50,7 +50,7 @@ namespace ProfilesAPI.Application
                 throw new PatientNotFoundException(id);
             }
 
-            await _repositoryManager.PatientRepository.DeleteAsync(id);
+            await _repositoryManager.PatientRepository.DeleteAsync(id, cancellationToken);
             await _publishEndpoint.Publish(new PatientDeleted(id));
         }
 
@@ -60,9 +60,9 @@ namespace ProfilesAPI.Application
             await ValidatePhoneNumber(model.PhoneNumber, id, cancellationToken);
 
             var patient = _mapper.Map<Patient>(model);
-            await _repositoryManager.PatientRepository.UpdateAsync(id, patient);
+            await _repositoryManager.PatientRepository.UpdateAsync(id, patient, cancellationToken);
             await _publishEndpoint.Publish(new PatientUpdated(id, patient.Info.FirstName, patient.Info.MiddleName,
-                                                            patient.Info.LastName, patient.PhoneNumber, patient.Info.BirthDay));
+                                                            patient.Info.LastName, patient.PhoneNumber, patient.Info.BirthDay), cancellationToken);
         }
 
         public async Task<PatientDTO> GetPatientAsync(Guid id, CancellationToken cancellationToken = default)
@@ -76,10 +76,10 @@ namespace ProfilesAPI.Application
             return _mapper.Map<PatientDTO>(patient);
         }
 
-        public IEnumerable<PatientDTO> GetPatients(Page page, PatientFiltrationModel filtrationModel)
+        public async Task<IEnumerable<PatientDTO>> GetPatientsAsync(Page page, PatientFiltrationModel filtrationModel, CancellationToken cancellationToken = default)
         {
             var filtrator = _mapper.Map<IFiltrator<Patient>>(filtrationModel);
-            var patients = _repositoryManager.PatientRepository.GetItems(page.Size, page.Number, filtrator);
+            var patients = await _repositoryManager.PatientRepository.GetItemsAsync(page.Size, page.Number, filtrator, cancellationToken);
             return _mapper.Map<IEnumerable<PatientDTO>>(patients);
         }
 

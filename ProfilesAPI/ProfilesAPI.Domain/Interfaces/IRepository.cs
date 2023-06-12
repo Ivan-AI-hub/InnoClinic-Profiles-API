@@ -11,25 +11,25 @@ namespace ProfilesAPI.Domain.Interfaces
 
         /// <param name="predicate">Special predicate for element search</param>
         /// <returns>IQueryable collection</returns>
-        public IQueryable<T> GetItemsByCondition(Expression<Func<T, bool>> predicate);
+        public Task<IEnumerable<T>> GetItemsByConditionAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 
         /// <returns>queryable items from the database</returns>
-        public IQueryable<T> GetItems(int pageSize, int pageNumber, IFiltrator<T> filtrator);
+        public Task<IEnumerable<T>> GetItemsAsync(int pageSize, int pageNumber, IFiltrator<T> filtrator, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Create item in database
         /// </summary>
-        public Task CreateAsync(T item);
+        public Task CreateAsync(T item, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update item in database
         /// </summary>
-        public Task UpdateAsync(Guid id, T updatedItem);
+        public Task UpdateAsync(Guid id, T updatedItem, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete item from database
         /// </summary>
-        public Task DeleteAsync(Guid id);
+        public Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
         /// <returns>true if the element exists, and false if not</returns>
         public Task<bool> IsItemExistAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);

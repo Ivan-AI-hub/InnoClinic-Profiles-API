@@ -32,9 +32,9 @@ namespace ProfilesAPI.Application
 
             var doctor = _mapper.Map<Doctor>(model);
 
-            await _repositoryManager.DoctorRepository.CreateAsync(doctor);
+            await _repositoryManager.DoctorRepository.CreateAsync(doctor, cancellationToken);
             await _publishEndpoint.Publish(new DoctorCreated(doctor.Id, doctor.Info.Email, doctor.Info.FirstName, doctor.Info.MiddleName,
-                                doctor.Info.LastName, doctor.Office.Id, doctor.Specialization, doctor.CareerStartYear, doctor.Info.BirthDay));
+                                doctor.Info.LastName, doctor.Office.Id, doctor.Specialization, doctor.CareerStartYear, doctor.Info.BirthDay), cancellationToken);
             return _mapper.Map<DoctorDTO>(doctor);
         }
 
@@ -43,14 +43,14 @@ namespace ProfilesAPI.Application
             await ValidateModel(model, _editDoctorModel, cancellationToken);
 
             var doctor = _mapper.Map<Doctor>(model);
-            await _repositoryManager.DoctorRepository.UpdateAsync(id, doctor);
+            await _repositoryManager.DoctorRepository.UpdateAsync(id, doctor, cancellationToken);
             await _publishEndpoint.Publish(new DoctorUpdated(id, doctor.Info.FirstName, doctor.Info.MiddleName,
-                                doctor.Info.LastName, doctor.Office.Id, doctor.Specialization, doctor.CareerStartYear, doctor.Info.BirthDay));
+                                doctor.Info.LastName, doctor.Office.Id, doctor.Specialization, doctor.CareerStartYear, doctor.Info.BirthDay), cancellationToken);
         }
 
         public async Task EditDoctorStatusAsync(Guid id, WorkStatusDTO workStatus, CancellationToken cancellationToken = default)
         {
-            await _repositoryManager.DoctorRepository.UpdateStatusAsync(id, _mapper.Map<WorkStatus>(workStatus));
+            await _repositoryManager.DoctorRepository.UpdateStatusAsync(id, _mapper.Map<WorkStatus>(workStatus), cancellationToken);
         }
 
         public async Task<DoctorDTO> GetDoctorAsync(Guid id, CancellationToken cancellationToken = default)
@@ -64,10 +64,10 @@ namespace ProfilesAPI.Application
             return _mapper.Map<DoctorDTO>(doctor);
         }
 
-        public IEnumerable<DoctorDTO> GetDoctors(Page page, DoctorFiltrationModel filtrationModel)
+        public async Task<IEnumerable<DoctorDTO>> GetDoctorsAsync(Page page, DoctorFiltrationModel filtrationModel, CancellationToken cancellationToken = default)
         {
             var filtrator = _mapper.Map<IFiltrator<Doctor>>(filtrationModel);
-            var doctors = _repositoryManager.DoctorRepository.GetItems(page.Size, page.Number, filtrator);
+            var doctors = await _repositoryManager.DoctorRepository.GetItemsAsync(page.Size, page.Number, filtrator, cancellationToken);
             return _mapper.Map<IEnumerable<DoctorDTO>>(doctors);
         }
     }

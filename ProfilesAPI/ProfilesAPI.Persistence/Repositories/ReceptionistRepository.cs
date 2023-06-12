@@ -12,9 +12,9 @@ namespace ProfilesAPI.Persistence.Repositories
         {
         }
 
-        public override async Task DeleteAsync(Guid id)
+        public override async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var receptionist = await GetItemAsync(id);
+            var receptionist = await GetItemAsync(id, cancellationToken);
 
             if (receptionist == null)
             {
@@ -23,7 +23,7 @@ namespace ProfilesAPI.Persistence.Repositories
 
             Context.HumansInfo.Remove(receptionist.Info);
             Context.Receptionists.Remove(receptionist);
-            await Context.SaveChangesAsync();
+            await Context.SaveChangesAsync(cancellationToken);
         }
 
         public override Task<Receptionist?> GetItemAsync(Guid id, CancellationToken cancellationToken = default)
@@ -32,11 +32,11 @@ namespace ProfilesAPI.Persistence.Repositories
             return receptionists.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public override async Task UpdateAsync(Guid id, Receptionist updatedItem)
+        public override async Task UpdateAsync(Guid id, Receptionist updatedItem, CancellationToken cancellationToken = default)
         {
             var receptionist = await Context.Receptionists
                                             .Include(x => x.Info)
-                                            .FirstOrDefaultAsync(x => x.Id == id);
+                                            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (receptionist == null)
             {
@@ -50,7 +50,7 @@ namespace ProfilesAPI.Persistence.Repositories
             receptionist.Info.Photo = updatedItem.Info.Photo;
             receptionist.Office.Id = updatedItem.Office.Id;
 
-            await Context.SaveChangesAsync();
+            await Context.SaveChangesAsync(cancellationToken);
         }
 
         protected override IQueryable<Receptionist> GetFullDataQueryable()

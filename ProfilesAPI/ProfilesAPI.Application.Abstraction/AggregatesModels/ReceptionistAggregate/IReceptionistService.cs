@@ -6,6 +6,6 @@
         Task DeleteReceptionistAsync(Guid id, CancellationToken cancellationToken = default);
         Task EditReceptionistAsync(Guid id, EditReceptionistModel model, CancellationToken cancellationToken = default);
         Task<ReceptionistDTO> GetReceptionistAsync(Guid id, CancellationToken cancellationToken = default);
-        IEnumerable<ReceptionistDTO> GetReceptionists(Page page, ReceptionistFiltrationModel filtrationModel);
+        Task<IEnumerable<ReceptionistDTO>> GetReceptionistsAsync(Page page, ReceptionistFiltrationModel filtrationModel, CancellationToken cancellationToken = default);
     }
 }

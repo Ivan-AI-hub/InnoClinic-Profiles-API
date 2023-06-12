@@ -12,9 +12,9 @@ namespace ProfilesAPI.Persistence.Repositories
         {
         }
 
-        public override async Task DeleteAsync(Guid id)
+        public override async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var patient = await GetItemAsync(id);
+            var patient = await GetItemAsync(id, cancellationToken);
 
             if (patient == null)
             {
@@ -23,7 +23,7 @@ namespace ProfilesAPI.Persistence.Repositories
 
             Context.HumansInfo.Remove(patient.Info);
             Context.Patients.Remove(patient);
-            await Context.SaveChangesAsync();
+            await Context.SaveChangesAsync(cancellationToken);
         }
 
         public override Task<Patient?> GetItemAsync(Guid id, CancellationToken cancellationToken = default)
@@ -32,10 +32,10 @@ namespace ProfilesAPI.Persistence.Repositories
             return patients.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
-        public override async Task UpdateAsync(Guid id, Patient updatedItem)
+        public override async Task UpdateAsync(Guid id, Patient updatedItem, CancellationToken cancellationToken = default)
         {
             var patient = await Context.Patients.Include(x => x.Info)
-                                                .FirstOrDefaultAsync(x => x.Id == id);
+                                                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (patient == null)
             {
@@ -49,7 +49,7 @@ namespace ProfilesAPI.Persistence.Repositories
             patient.Info.Photo = updatedItem.Info.Photo;
             patient.PhoneNumber = updatedItem.PhoneNumber;
 
-            await Context.SaveChangesAsync();
+            await Context.SaveChangesAsync(cancellationToken);
         }
 
         protected override IQueryable<Patient> GetFullDataQueryable()

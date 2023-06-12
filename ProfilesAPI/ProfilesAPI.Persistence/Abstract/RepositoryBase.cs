@@ -18,28 +18,28 @@ namespace ProfilesAPI.Persistence.Abstract
             return GetFullDataQueryable().AnyAsync(predicate, cancellationToken);
         }
 
-        public IQueryable<T> GetItemsByCondition(Expression<Func<T, bool>> predicate)
+        public async Task<IEnumerable<T>> GetItemsByConditionAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return GetFullDataQueryable().Where(predicate).AsNoTracking();
+            return await GetFullDataQueryable().Where(predicate).AsNoTracking().ToListAsync(cancellationToken);
         }
 
-        public async Task CreateAsync(T item)
+        public async Task CreateAsync(T item, CancellationToken cancellationToken = default)
         {
-            await Context.Set<T>().AddAsync(item);
-            await Context.SaveChangesAsync();
+            await Context.Set<T>().AddAsync(item, cancellationToken);
+            await Context.SaveChangesAsync(cancellationToken);
         }
 
-        public virtual IQueryable<T> GetItems(int pageSize, int pageNumber, IFiltrator<T> filtrator)
+        public virtual async Task<IEnumerable<T>> GetItemsAsync(int pageSize, int pageNumber, IFiltrator<T> filtrator, CancellationToken cancellationToken = default)
         {
             var items = filtrator.Filtrate(GetFullDataQueryable());
-            return GetPage(items, pageSize, pageNumber);
+            return await GetPage(items, pageSize, pageNumber).ToListAsync(cancellationToken);
         }
 
         public abstract Task<T?> GetItemAsync(Guid id, CancellationToken cancellationToken = default);
 
-        public abstract Task UpdateAsync(Guid id, T updatedItem);
+        public abstract Task UpdateAsync(Guid id, T updatedItem, CancellationToken cancellationToken = default);
 
-        public abstract Task DeleteAsync(Guid id);
+        public abstract Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 
         protected virtual IQueryable<T> GetFullDataQueryable()
         {

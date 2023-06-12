@@ -30,7 +30,7 @@ namespace ProfilesAPI.Application
 
             var receptionist = _mapper.Map<Receptionist>(model);
 
-            await _repositoryManager.ReceptionistRepository.CreateAsync(receptionist);
+            await _repositoryManager.ReceptionistRepository.CreateAsync(receptionist, cancellationToken);
 
             return _mapper.Map<ReceptionistDTO>(receptionist);
         }
@@ -43,7 +43,7 @@ namespace ProfilesAPI.Application
                 throw new ReceptionistNotFoundException(id);
             }
 
-            await _repositoryManager.ReceptionistRepository.DeleteAsync(id);
+            await _repositoryManager.ReceptionistRepository.DeleteAsync(id, cancellationToken);
         }
 
         public async Task EditReceptionistAsync(Guid id, EditReceptionistModel model, CancellationToken cancellationToken = default)
@@ -52,7 +52,7 @@ namespace ProfilesAPI.Application
 
             var receptionist = _mapper.Map<Receptionist>(model);
 
-            await _repositoryManager.ReceptionistRepository.UpdateAsync(id, receptionist);
+            await _repositoryManager.ReceptionistRepository.UpdateAsync(id, receptionist, cancellationToken);
         }
 
         public async Task<ReceptionistDTO> GetReceptionistAsync(Guid id, CancellationToken cancellationToken = default)
@@ -66,10 +66,10 @@ namespace ProfilesAPI.Application
             return _mapper.Map<ReceptionistDTO>(receptionist);
         }
 
-        public IEnumerable<ReceptionistDTO> GetReceptionists(Page page, ReceptionistFiltrationModel filtrationModel)
+        public async Task<IEnumerable<ReceptionistDTO>> GetReceptionistsAsync(Page page, ReceptionistFiltrationModel filtrationModel, CancellationToken cancellationToken = default)
         {
             var filtrator = _mapper.Map<IFiltrator<Receptionist>>(filtrationModel);
-            var receptionists = _repositoryManager.ReceptionistRepository.GetItems(page.Size, page.Number, filtrator);
+            var receptionists = await _repositoryManager.ReceptionistRepository.GetItemsAsync(page.Size, page.Number, filtrator, cancellationToken);
             return _mapper.Map<IEnumerable<ReceptionistDTO>>(receptionists);
         }
     }

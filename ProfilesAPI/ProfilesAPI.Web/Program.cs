@@ -15,7 +15,7 @@ builder.Services.ConfigureSwagger();
 builder.Services.ConfigureServices();
 builder.Services.ConfigureJWT(builder.Configuration);
 
-builder.Services.AddControllers()
+builder.Services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false)
     .AddApplicationPart(typeof(DoctorController).Assembly);
 
 builder.Services.AddEndpointsApiExplorer();
