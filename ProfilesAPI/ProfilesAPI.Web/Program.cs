@@ -1,6 +1,7 @@
 using FluentValidation;
 using ProfilesAPI.Application.Mappings;
 using ProfilesAPI.Application.Validators;
+using ProfilesAPI.Persistence;
 using ProfilesAPI.Presentation.Controllers;
 using ProfilesAPI.Web.Extensions;
 using ProfilesAPI.Web.Middlewares;
@@ -24,7 +25,7 @@ builder.Services.AddAutoMapper(typeof(ServiceMappingProfile));
 builder.Services.AddValidatorsFromAssemblyContaining<CreatePatientValidator>();
 
 var app = builder.Build();
-
+app.MigrateDatabase<ProfilesContext>();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
