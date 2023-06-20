@@ -46,13 +46,13 @@ namespace ProfilesAPI.Presentation.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{email}")]
         [ProducesResponseType(typeof(PatientDTO), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 404)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public async Task<IActionResult> GetPatientAsync(Guid id, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> GetPatientAsync(string email, CancellationToken cancellationToken = default)
         {
-            var patient = await _patientService.GetPatientAsync(id, cancellationToken);
+            var patient = await _patientService.GetPatientAsync(email, cancellationToken);
             return Ok(patient);
         }
 

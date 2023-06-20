@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
+﻿using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.HumanInfoAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.OfficeAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate;
@@ -10,33 +9,33 @@ using ProfilesAPI.Domain.Interfaces;
 
 namespace ProfilesAPI.Application.Mappings
 {
-    public class ServiceMappingProfile : Profile
+    public class ServiceMappingProfile : AutoMapper.Profile
     {
         public ServiceMappingProfile()
         {
-            CreateMap<Patient, PatientDTO>();
-            CreateMap<PatientFiltrationModel, IFiltrator<Patient>>().As<PatientFiltrator>();
+            CreateMap<Profile, PatientDTO>();
+            CreateMap<PatientFiltrationModel, IFiltrator<Profile>>().As<PatientFiltrator>();
             CreateMap<PatientFiltrationModel, PatientFiltrator>();
-            CreateMap<CreatePatientModel, Patient>();
-            CreateMap<EditPatientModel, Patient>().ForMember(x => x.Info,
+            CreateMap<CreatePatientModel, Profile>();
+            CreateMap<EditPatientModel, Profile>().ForMember(x => x.Info,
                     s => s.MapFrom(t => new HumanInfo("", t.FirstName, t.LastName, t.MiddleName, t.BirthDay)
                     { Photo = t.Photo != null ? new Picture(t.Photo.Name) : null }));
 
-            CreateMap<Doctor, DoctorDTO>();
-            CreateMap<DoctorFiltrationModel, IFiltrator<Doctor>>().As<DoctorFiltrator>();
+            CreateMap<Profile, DoctorDTO>();
+            CreateMap<DoctorFiltrationModel, IFiltrator<Profile>>().As<DoctorFiltrator>();
             CreateMap<DoctorFiltrationModel, DoctorFiltrator>();
-            CreateMap<CreateDoctorModel, Doctor>().ForMember(x => x.Office, r => r.MapFrom(t => new Office(t.OfficeId)));
-            CreateMap<EditDoctorModel, Doctor>()
+            CreateMap<CreateDoctorModel, Profile>().ForMember(x => x.Office, r => r.MapFrom(t => new Office(t.OfficeId)));
+            CreateMap<EditDoctorModel, Profile>()
                 .ForMember(x => x.Info,
                 s => s.MapFrom(t => new HumanInfo("", t.FirstName, t.LastName, t.MiddleName, t.BirthDay)
                 { Photo = t.Photo != null ? new Picture(t.Photo.Name) : null }))
                 .ForMember(x => x.Office, s => s.MapFrom(t => new Office(t.OfficeId)));
 
-            CreateMap<Receptionist, ReceptionistDTO>();
-            CreateMap<ReceptionistFiltrationModel, IFiltrator<Receptionist>>().As<ReceptionistFiltrator>();
+            CreateMap<Profile, ReceptionistDTO>();
+            CreateMap<ReceptionistFiltrationModel, IFiltrator<Profile>>().As<ReceptionistFiltrator>();
             CreateMap<ReceptionistFiltrationModel, ReceptionistFiltrator>();
-            CreateMap<CreateReceptionistModel, Receptionist>();
-            CreateMap<EditReceptionistModel, Receptionist>()
+            CreateMap<CreateReceptionistModel, Profile>();
+            CreateMap<EditReceptionistModel, Profile>()
                 .ForMember(x => x.Info,
                 s => s.MapFrom(t => new HumanInfo("", t.FirstName, t.LastName, t.MiddleName, t.BirthDay)
                 { Photo = t.Photo != null ? new Picture(t.Photo.Name) : null }))

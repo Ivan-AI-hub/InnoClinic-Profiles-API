@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace ProfilesAPI.Persistence.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class editprofilesstructure : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,50 +27,28 @@ namespace ProfilesAPI.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Doctors",
+                name: "Profiles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     InfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Specialization = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Office_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CareerStartYear = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false)
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Specialization = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Office_Id = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CareerStartYear = table.Column<int>(type: "int", nullable: true),
+                    Status = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Doctors", x => x.Id);
+                    table.PrimaryKey("PK_Profiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Doctors_HumansInfo_InfoId",
+                        name: "FK_Profiles_HumansInfo_InfoId",
                         column: x => x.InfoId,
                         principalTable: "HumansInfo",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "Patients",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    InfoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Patients", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Patients_HumansInfo_InfoId",
-                        column: x => x.InfoId,
-                        principalTable: "HumansInfo",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Doctors_InfoId",
-                table: "Doctors",
-                column: "InfoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HumansInfo_Email",
@@ -78,24 +57,15 @@ namespace ProfilesAPI.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Patients_InfoId",
-                table: "Patients",
+                name: "IX_Profiles_InfoId",
+                table: "Profiles",
                 column: "InfoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Patients_PhoneNumber",
-                table: "Patients",
-                column: "PhoneNumber",
-                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Doctors");
-
-            migrationBuilder.DropTable(
-                name: "Patients");
+                name: "Profiles");
 
             migrationBuilder.DropTable(
                 name: "HumansInfo");

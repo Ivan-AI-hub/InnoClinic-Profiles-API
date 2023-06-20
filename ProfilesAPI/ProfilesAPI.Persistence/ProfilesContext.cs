@@ -11,16 +11,12 @@ namespace ProfilesAPI.Persistence
         {
         }
 
-        public DbSet<Doctor> Doctors { get; set; }
-        public DbSet<Receptionist> Receptionists { get; set; }
-        public DbSet<Patient> Patients { get; set; }
+        public DbSet<Profile> Profiles { get; set; }
         public DbSet<HumanInfo> HumansInfo { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new DoctorConfigurator());
-            modelBuilder.ApplyConfiguration(new ReceptionistConfigurator());
-            modelBuilder.ApplyConfiguration(new PatientConfigurator());
+            modelBuilder.ApplyConfiguration(new ProfileConfigurator());
             modelBuilder.ApplyConfiguration(new HumanInfoConfigurator());
         }
 

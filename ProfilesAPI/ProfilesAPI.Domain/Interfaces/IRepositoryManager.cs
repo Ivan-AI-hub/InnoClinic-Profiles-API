@@ -2,9 +2,7 @@
 {
     public interface IRepositoryManager
     {
-        public IPatientRepository PatientRepository { get; }
-        public IDoctorRepository DoctorRepository { get; }
+        public IProfileRepository ProfileRepository { get; }
         public IHumanInfoRepository HumanInfoRepository { get; }
-        public IReceptionistRepository ReceptionistRepository { get; }
     }
 }

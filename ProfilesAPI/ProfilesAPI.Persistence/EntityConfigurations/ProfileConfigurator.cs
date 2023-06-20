@@ -4,12 +4,12 @@ using ProfilesAPI.Domain;
 
 namespace ProfilesAPI.Persistence.EntityConfigurations
 {
-    internal class PatientConfigurator : IEntityTypeConfiguration<Patient>
+    internal class ProfileConfigurator : IEntityTypeConfiguration<Profile>
     {
-        public void Configure(EntityTypeBuilder<Patient> builder)
+        public void Configure(EntityTypeBuilder<Profile> builder)
         {
+            builder.OwnsOne(x => x.Office);
             builder.HasOne(x => x.Info);
-            builder.HasIndex(x => x.PhoneNumber).IsUnique();
         }
     }
 }

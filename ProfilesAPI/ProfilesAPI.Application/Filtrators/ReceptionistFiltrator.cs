@@ -4,9 +4,9 @@ using ProfilesAPI.Domain.Interfaces;
 
 namespace ProfilesAPI.Application.Filtrators
 {
-    public class ReceptionistFiltrator : ReceptionistFiltrationModel, IFiltrator<Receptionist>
+    public class ReceptionistFiltrator : ReceptionistFiltrationModel, IFiltrator<Profile>
     {
-        public IQueryable<Receptionist> Filtrate(IQueryable<Receptionist> query)
+        public IQueryable<Profile> Filtrate(IQueryable<Profile> query)
         {
             query = FirstName != null ? query.Where(x => x.Info.FirstName.ToLower().Contains(FirstName.ToLower())) : query;
             query = LastName != null ? query.Where(x => x.Info.LastName.ToLower().Contains(LastName.ToLower())) : query;

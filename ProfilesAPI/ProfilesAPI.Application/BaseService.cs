@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using ProfilesAPI.Domain;
 using ProfilesAPI.Domain.Exceptions;
 using ProfilesAPI.Domain.Interfaces;
 
@@ -18,6 +19,32 @@ namespace ProfilesAPI.Application
             if (isEmailInvalid)
             {
                 throw new ProfileWithSameEmailExistException(email);
+            }
+        }
+
+        protected async Task ValidateRoleAndExistingAsync(Guid id, Role needRole, CancellationToken cancellationToken = default)
+        {
+            var user = await _repositoryManager.ProfileRepository.GetItemAsync(id, cancellationToken);
+            if (user == null)
+            {
+                throw new ProfileNotFoundException(id);
+            }
+            if(user.Role != needRole)
+            {
+                throw new RoleNotMatchException(user.Role, needRole);
+            }
+        }
+
+        protected async Task ValidateRoleAndExistingAsync(string email, Role needRole, CancellationToken cancellationToken = default)
+        {
+            var user = await _repositoryManager.ProfileRepository.GetByEmailAsync(email, cancellationToken);
+            if (user == null)
+            {
+                throw new ProfileNotFoundException(email);
+            }
+            if (user.Role != needRole)
+            {
+                throw new RoleNotMatchException(user.Role, needRole);
             }
         }
 

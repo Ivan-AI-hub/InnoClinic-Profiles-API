@@ -1,20 +1,18 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using ProfilesAPI.Application.Abstraction;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate;
 using ProfilesAPI.Domain;
-using ProfilesAPI.Domain.Exceptions;
 using ProfilesAPI.Domain.Interfaces;
 
 namespace ProfilesAPI.Application
 {
     public class ReceptionistService : BaseService, IReceptionistService
     {
-        private readonly IMapper _mapper;
+        private readonly AutoMapper.IMapper _mapper;
         private readonly IValidator<CreateReceptionistModel> _createReceptionistValidator;
         private readonly IValidator<EditReceptionistModel> _editReceptionistModel;
 
-        public ReceptionistService(IRepositoryManager repositoryManager, IMapper mapper,
+        public ReceptionistService(IRepositoryManager repositoryManager, AutoMapper.IMapper mapper,
             IValidator<CreateReceptionistModel> createReceptionistValidator,
             IValidator<EditReceptionistModel> editReceptionistModel) : base(repositoryManager)
         {
@@ -28,48 +26,51 @@ namespace ProfilesAPI.Application
             await ValidateModel(model, _createReceptionistValidator, cancellationToken);
             await ValidateEmailAsync(model.Info.Email, cancellationToken);
 
-            var receptionist = _mapper.Map<Receptionist>(model);
+            var receptionist = _mapper.Map<Profile>(model);
+            receptionist.Role = Role.Admin;
 
-            await _repositoryManager.ReceptionistRepository.CreateAsync(receptionist, cancellationToken);
+            await _repositoryManager.ProfileRepository.CreateAsync(receptionist, cancellationToken);
 
             return _mapper.Map<ReceptionistDTO>(receptionist);
         }
 
         public async Task DeleteReceptionistAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var receptionist = await _repositoryManager.ReceptionistRepository.GetItemAsync(id, cancellationToken);
-            if (receptionist == null)
-            {
-                throw new ReceptionistNotFoundException(id);
-            }
+            await ValidateRoleAndExistingAsync(id, Role.Admin);
 
-            await _repositoryManager.ReceptionistRepository.DeleteAsync(id, cancellationToken);
+            await _repositoryManager.ProfileRepository.DeleteAsync(id, cancellationToken);
         }
 
         public async Task EditReceptionistAsync(Guid id, EditReceptionistModel model, CancellationToken cancellationToken = default)
         {
             await ValidateModel(model, _editReceptionistModel, cancellationToken);
+            await ValidateRoleAndExistingAsync(id, Role.Admin);
 
-            var receptionist = _mapper.Map<Receptionist>(model);
+            var receptionist = _mapper.Map<Profile>(model);
 
-            await _repositoryManager.ReceptionistRepository.UpdateAsync(id, receptionist, cancellationToken);
+            await _repositoryManager.ProfileRepository.UpdateAsync(id, receptionist, cancellationToken);
         }
 
         public async Task<ReceptionistDTO> GetReceptionistAsync(Guid id, CancellationToken cancellationToken = default)
         {
-            var receptionist = await _repositoryManager.ReceptionistRepository.GetItemAsync(id, cancellationToken);
-            if (receptionist == null)
-            {
-                throw new ReceptionistNotFoundException(id);
-            }
+            await ValidateRoleAndExistingAsync(id, Role.Admin);
+            var receptionist = await _repositoryManager.ProfileRepository.GetItemAsync(id, cancellationToken);
+
+            return _mapper.Map<ReceptionistDTO>(receptionist);
+        }
+
+        public async Task<ReceptionistDTO> GetReceptionistAsync(string email, CancellationToken cancellationToken = default)
+        {
+            await ValidateRoleAndExistingAsync(email, Role.Admin);
+            var receptionist = await _repositoryManager.ProfileRepository.GetByEmailAsync(email, cancellationToken);
 
             return _mapper.Map<ReceptionistDTO>(receptionist);
         }
 
         public async Task<IEnumerable<ReceptionistDTO>> GetReceptionistsAsync(Page page, ReceptionistFiltrationModel filtrationModel, CancellationToken cancellationToken = default)
         {
-            var filtrator = _mapper.Map<IFiltrator<Receptionist>>(filtrationModel);
-            var receptionists = await _repositoryManager.ReceptionistRepository.GetItemsAsync(page.Size, page.Number, filtrator, cancellationToken);
+            var filtrator = _mapper.Map<IFiltrator<Profile>>(filtrationModel);
+            var receptionists = await _repositoryManager.ProfileRepository.GetItemsByRoleAsync(Role.Admin, page.Size, page.Number, filtrator, cancellationToken);
             return _mapper.Map<IEnumerable<ReceptionistDTO>>(receptionists);
         }
     }
