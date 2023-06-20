@@ -22,7 +22,7 @@ namespace ProfilesAPI.Presentation.Controllers
         public async Task<IActionResult> CreateAsync(CreateReceptionistModel createModel, CancellationToken cancellationToken = default)
         {
             var receptionist = await _receptionistService.CreateReceptionistAsync(createModel, cancellationToken);
-            return CreatedAtAction(nameof(GetReceptionistAsync), new { id = receptionist.Id }, receptionist);
+            return CreatedAtAction(nameof(GetReceptionistAsync), new { email = createModel.Info.Email }, receptionist);
         }
 
         [HttpPut("{id}")]

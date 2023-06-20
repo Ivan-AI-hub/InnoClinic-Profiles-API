@@ -10,6 +10,7 @@ using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate
 using ProfilesAPI.Domain.Interfaces;
 using ProfilesAPI.Persistence;
 using ProfilesAPI.Persistence.Repositories;
+using ProfilesAPI.Presentation.Consumers;
 using ProfilesAPI.Web.Settings;
 
 namespace ProfilesAPI.Web.Extensions
@@ -48,6 +49,8 @@ namespace ProfilesAPI.Web.Extensions
             var settings = configuration.GetSection(massTransitSettingsName).Get<MassTransitSettings>();
             services.AddMassTransit(x =>
             {
+                x.AddConsumersFromNamespaceContaining<UserRoleUpdatedConsumer>();
+                x.AddConsumeObserver<ConsumeObserver>();
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(settings.Host, settings.VirtualHost, h =>
