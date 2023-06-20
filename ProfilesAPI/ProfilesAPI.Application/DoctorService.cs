@@ -73,7 +73,7 @@ namespace ProfilesAPI.Application
         public async Task<IEnumerable<DoctorDTO>> GetDoctorsAsync(Page page, DoctorFiltrationModel filtrationModel, CancellationToken cancellationToken = default)
         {
             var filtrator = _mapper.Map<IFiltrator<Profile>>(filtrationModel);
-            var doctors = await _repositoryManager.ProfileRepository.GetItemsByRoleAsync(Role.Doctor,page.Size, page.Number, filtrator, cancellationToken);
+            var doctors = await _repositoryManager.ProfileRepository.GetItemsByRoleAsync(Role.Doctor, page.Size, page.Number, filtrator, cancellationToken);
             return _mapper.Map<IEnumerable<DoctorDTO>>(doctors);
         }
     }

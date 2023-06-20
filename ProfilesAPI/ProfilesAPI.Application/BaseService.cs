@@ -29,7 +29,7 @@ namespace ProfilesAPI.Application
             {
                 throw new ProfileNotFoundException(id);
             }
-            if(user.Role != needRole)
+            if (user.Role != needRole)
             {
                 throw new RoleNotMatchException(user.Role, needRole);
             }

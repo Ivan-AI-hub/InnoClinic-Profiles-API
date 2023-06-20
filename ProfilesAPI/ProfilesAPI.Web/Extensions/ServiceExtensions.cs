@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using ProfilesAPI.Application;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.PatientAggregate;
+using ProfilesAPI.Application.Abstraction.AggregatesModels.ProfileAggregate;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.ReceptionistAggregate;
 using ProfilesAPI.Domain.Interfaces;
 using ProfilesAPI.Persistence;
@@ -31,6 +32,7 @@ namespace ProfilesAPI.Web.Extensions
             services.AddScoped<IPatientService, PatientService>();
             services.AddScoped<IDoctorService, DoctorService>();
             services.AddScoped<IReceptionistService, ReceptionistService>();
+            services.AddScoped<IProfileService, ProfileService>();
         }
 
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
@@ -54,7 +56,7 @@ namespace ProfilesAPI.Web.Extensions
                         h.Password(settings.Password);
                     });
                     cfg.AddRawJsonSerializer();
-                    cfg.ConfigureEndpoints(context);
+                    cfg.ConfigureEndpoints(context, new KebabCaseEndpointNameFormatter(true));
                 });
             });
         }
