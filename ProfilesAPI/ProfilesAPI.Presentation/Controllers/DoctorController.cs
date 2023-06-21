@@ -2,6 +2,7 @@
 using ProfilesAPI.Application.Abstraction;
 using ProfilesAPI.Application.Abstraction.AggregatesModels.DoctorAggregate;
 using ProfilesAPI.Presentation.Models.ErrorModels;
+using ProfilesAPI.Presentation.Models.RequestModels;
 
 namespace ProfilesAPI.Presentation.Controllers
 {
@@ -30,7 +31,7 @@ namespace ProfilesAPI.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorDetails), 400)]
         [ProducesResponseType(typeof(ErrorDetails), 404)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public async Task<IActionResult> EditAsync(Guid id, EditDoctorModel editModel, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> EditAsync(Guid id, [FromBody] EditDoctorModel editModel, CancellationToken cancellationToken = default)
         {
             await _doctorService.EditDoctorAsync(id, editModel, cancellationToken);
             return NoContent();
@@ -41,9 +42,9 @@ namespace ProfilesAPI.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorDetails), 400)]
         [ProducesResponseType(typeof(ErrorDetails), 404)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public async Task<IActionResult> EditStatusAsync(Guid id, WorkStatusDTO workStatus, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> EditStatusAsync(Guid id, [FromBody] EditStatusRequestModel model, CancellationToken cancellationToken = default)
         {
-            await _doctorService.EditDoctorStatusAsync(id, workStatus, cancellationToken);
+            await _doctorService.EditDoctorStatusAsync(id, model.WorkStatus, cancellationToken);
             return NoContent();
         }
 

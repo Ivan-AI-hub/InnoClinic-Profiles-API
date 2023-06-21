@@ -19,7 +19,7 @@ namespace ProfilesAPI.Presentation.Controllers
         [ProducesResponseType(typeof(ReceptionistDTO), 201)]
         [ProducesResponseType(typeof(ErrorDetails), 400)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public async Task<IActionResult> CreateAsync(CreateReceptionistModel createModel, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateReceptionistModel createModel, CancellationToken cancellationToken = default)
         {
             var receptionist = await _receptionistService.CreateReceptionistAsync(createModel, cancellationToken);
             return CreatedAtAction(nameof(GetReceptionistAsync), new { email = createModel.Info.Email }, receptionist);
@@ -30,7 +30,7 @@ namespace ProfilesAPI.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorDetails), 400)]
         [ProducesResponseType(typeof(ErrorDetails), 404)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
-        public async Task<IActionResult> EditAsync(Guid id, EditReceptionistModel editModel, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> EditAsync(Guid id, [FromBody] EditReceptionistModel editModel, CancellationToken cancellationToken = default)
         {
             await _receptionistService.EditReceptionistAsync(id, editModel, cancellationToken);
             return NoContent();
