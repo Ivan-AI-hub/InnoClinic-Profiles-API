@@ -12,6 +12,9 @@ using ProfilesAPI.Persistence;
 using ProfilesAPI.Persistence.Repositories;
 using ProfilesAPI.Presentation.Consumers;
 using ProfilesAPI.Web.Settings;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
+using System.Reflection;
 
 namespace ProfilesAPI.Web.Extensions
 {
@@ -35,7 +38,24 @@ namespace ProfilesAPI.Web.Extensions
             services.AddScoped<IReceptionistService, ReceptionistService>();
             services.AddScoped<IProfileService, ProfileService>();
         }
-
+        public static void ConfigureLogger(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment, string elasticUriSection)
+        {
+            services.AddSerilog((context, loggerConfiguration) =>
+            {
+                loggerConfiguration.Enrich.FromLogContext()
+                    .Enrich.WithMachineName()
+                    .WriteTo.Console()
+                    .WriteTo.Elasticsearch(new ElasticsearchSinkOptions(new Uri(configuration[elasticUriSection]))
+                    {
+                        IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name!.ToLower().Replace(".", "-")}-{environment.EnvironmentName?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}",
+                        AutoRegisterTemplate = true,
+                        NumberOfShards = 2,
+                        NumberOfReplicas = 1
+                    })
+                    .Enrich.WithProperty("Environment", environment.EnvironmentName)
+                    .ReadFrom.Configuration(configuration);
+            });
+        }
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(opt =>
