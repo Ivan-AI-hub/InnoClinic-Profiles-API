@@ -46,7 +46,17 @@ namespace ProfilesAPI.Presentation.Controllers
             return NoContent();
         }
 
-        [HttpGet("{email}")]
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ReceptionistDTO), 200)]
+        [ProducesResponseType(typeof(ErrorDetails), 404)]
+        [ProducesResponseType(typeof(ErrorDetails), 500)]
+        public async Task<IActionResult> GetReceptionistAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var receptionist = await _receptionistService.GetReceptionistAsync(id, cancellationToken);
+            return Ok(receptionist);
+        }
+
+        [HttpGet("email/{email}")]
         [ProducesResponseType(typeof(ReceptionistDTO), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 404)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]

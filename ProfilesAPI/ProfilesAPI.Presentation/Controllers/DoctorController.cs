@@ -48,13 +48,23 @@ namespace ProfilesAPI.Presentation.Controllers
             return NoContent();
         }
 
-        [HttpGet("{email}")]
+        [HttpGet("email/{email}")]
         [ProducesResponseType(typeof(DoctorDTO), 200)]
         [ProducesResponseType(typeof(ErrorDetails), 404)]
         [ProducesResponseType(typeof(ErrorDetails), 500)]
         public async Task<IActionResult> GetDoctorAsync(string email, CancellationToken cancellationToken = default)
         {
             var doctor = await _doctorService.GetDoctorAsync(email, cancellationToken);
+            return Ok(doctor);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(DoctorDTO), 200)]
+        [ProducesResponseType(typeof(ErrorDetails), 404)]
+        [ProducesResponseType(typeof(ErrorDetails), 500)]
+        public async Task<IActionResult> GetDoctorAsync(Guid id, CancellationToken cancellationToken = default)
+        {
+            var doctor = await _doctorService.GetDoctorAsync(id, cancellationToken);
             return Ok(doctor);
         }
 
